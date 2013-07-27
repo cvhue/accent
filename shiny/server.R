@@ -18,8 +18,27 @@ shinyServer(function(input, output) {
   
   # 3. 
   
-  output$summary <- renderPrint({
-    print("test")
+  source("schedule.R")
+  
+  output$summary <- renderTable({
+    accent
   })
   
+  output$plotT <- renderPlot({
+    print(schedule(accent))
   })
+  
+  
+  output$plotP <- renderPlot({
+    print(schedule(accent,reverse= TRUE))
+    
+  })
+  
+  
+  output$downloadData <- downloadHandler(
+    filename = function() { paste(input$dataset, '.csv', sep='') },
+    content = function(file) {
+      write.csv(datasetInput(), file)
+    }
+  )
+})

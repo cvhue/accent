@@ -11,15 +11,25 @@ shinyUI(pageWithSidebar(
     selectInput("variable", "Select physician:",
                 list("Jan" = "jan", 
                      "Stan" = "stan", 
-                     "Lien" = "lien"))),
+                     "Lien" = "lien")),
+    
+    
+    submitButton("Schedule"),
+    
+    conditionalPanel(
+      condition = "Patient.visible == true",
+      checkboxInput("headonly", "Only use first 1000 rows"))
+    
+    ),
+  
 
   
   # Begin main panel
   mainPanel(
     tabsetPanel(
-      tabPanel("Therapist", plotOutput("plot")), 
-      tabPanel("Patient", tableOutput("table")),
-      tabPanel("Summary", verbatimTextOutput("summary"))
+      tabPanel("Therapist", plotOutput("plotT"),    downloadButton('downloadData', 'Download')), 
+      tabPanel("Patient", plotOutput("plotP")),
+      tabPanel("Summary", tableOutput("summary"))
     )
   )
   # End main panel
