@@ -2,15 +2,8 @@ library(shiny)
 
 # Define server logic required to generate and plot a random distribution
 shinyServer(function(input, output) {
-  
-  # Expression that generates a plot of the distribution. The expression
-  # is wrapped in a call to renderPlot to indicate that:
-  #
-  #  1) It is "reactive" and therefore should be automatically 
-  #     re-executed when inputs change
-  #  2) Its output type is a plot 
-  #
 
+    
   
   # 1. check data
   
@@ -20,19 +13,31 @@ shinyServer(function(input, output) {
   
   source("schedule.R")
   
+  therapistInput <- reactive({
+    input$sel_ther
+  })
+  
+  patientInput <- reactive({
+    input$sel_pat
+  })
+  # display dataframe from accent
   output$summary <- renderTable({
     accent
   })
   
   output$plotT <- renderPlot({
-    print(schedule(accent))
+    source("optimize.R")
+    optimize()
+    if(therapistInput() == "All") print(schedule(accent))
+    else print(schedule(accent[accent$therapist == therapistInput(),]))
   })
   
   
   output$plotP <- renderPlot({
-    print(schedule(accent,reverse= TRUE))
-    
+    if(patientInput() == "All") print(schedule(accent,reverse=TRUE))
+    else print(schedule(accent[accent$patient == patientInput(),],reverse=TRUE))
   })
+  
   
   
   output$downloadData <- downloadHandler(
