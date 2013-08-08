@@ -1,0 +1,34 @@
+Package: thinkdata.accent
+Maintainer: Christophe Van Huele <christophe.vanhuele@gmail.com>, Kenny Helsens
+    <kenny@thinkdata.be>
+License: file LICENCE
+Title: Project title
+Type: Package
+LazyLoad: yes
+Author: Christophe Van Huele, Kenny Helsens
+Description: Functionalities to ease computation and reporting for brand
+    evolutions at MARS
+Version: 0.1
+URL: http://thinkdata.be
+Date: 2013-08-05
+Depends:
+    data.table,
+    knitr,
+    markdown,
+    Rglpk,
+    xlsx,xlsxjars,
+    rJava
+Suggests:
+    testthat,
+Collate:
+    'pkg.R'
+    'data.R'
+    'utils.R'
+    'onload.R'
+    'reporter.R'
+    'logging.R'
+    'optimize.R'
+    'run.R'
+    'schedule.R'
+    'test.R'
+    'input.R'

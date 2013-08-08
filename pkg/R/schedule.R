@@ -1,5 +1,5 @@
 library("ggplot2")
-accent = (read.csv("~/src/accent/shiny/solution.csv", sep=","))
+# accent = (read.csv("~/src/accent/shiny/solution.csv", sep=","))
 
 schedule <- function(df, 
                      lead = names(df)[1],

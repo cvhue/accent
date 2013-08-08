@@ -1,0 +1,204 @@
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- jQuery -->
+<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
+
+<!-- highlight.js -->
+<script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/7.3/highlight.min.js"></script>
+<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/7.3/styles/github.min.css" media="screen">
+
+<!-- bootstrap -->
+<script src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/css/bootstrap.min.css" media="screen">
+
+<!-- bootstrap-responsive -->
+<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/css/bootstrap-responsive.min.css" media="screen">
+
+<!-- tocify -->
+<script src="http://gregfranko.com/jquery.tocify.js/js/jquery.tocify.min.js"></script>
+<link rel="stylesheet" href="http://gregfranko.com/jquery.tocify.js/css/jquery.tocify.css">
+
+<!-- fancybox -->
+<script src="http://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.js"></script>
+<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.css">
+
+<!-- Mathjax configuration -->
+<!--<script type="text/x-mathjax-config">-->
+  <!--MathJax.Hub.Config({-->
+    <!--extensions: ["tex2jax.js"],-->
+    <!--jax: ["input/TeX", "output/HTML-CSS"],-->
+    <!--tex2jax: {-->
+      <!--inlineMath: [ ['$','$'], ["\\(","\\)"] ],-->
+      <!--displayMath: [ ['$$','$$'], ["\\[","\\]"] ],-->
+      <!--processEscapes: true-->
+    <!--},-->
+    <!--"HTML-CSS": { availableFonts: ["TeX"] }-->
+  <!--});-->
+<!--</script>-->
+
+<!--[> Mathjax <]-->
+<!--<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>-->
+
+<script>
+
+/* run scripts when document is ready */
+$(function() {
+
+  /* find all code blocks which have a class and add toggle */
+  $('pre code[class]').each(function(i, e) {
+    $(this).parent()
+      .before('<button class="btn-mini toggle btn-link">+/- '
+        + $(this).attr('class') + ' Code</button>');
+  });
+
+  /* Add toggle to output blocks and do not syntax highlight */
+  $('pre code').not('[class]').addClass('no-highlight')
+    .parent().before('<button class="btn-mini toggle btn-link">+/- Output</button>');
+
+  /* syntax highlight code blocks*/
+  hljs.initHighlighting();
+
+  /* onclick toggle next code block */
+  $('.toggle').click(function() {
+    $(this).next('pre').slideToggle();
+  });
+
+  /* hide by default if a perl or python script code block */
+  <!--$('code.perl,code.python').parent().hide();-->
+
+  /* give images a fancybox and thumbnail classes to allow lightbox and thumbnails TODO: make fancybox prev next if grouped */
+  $('p').each(function(){
+    $(this).children('img').unwrap().wrapAll('<ul class="thumbnails" />').wrap('<li class="span4"><a href="#", class="thumbnail"></a></li>').addClass('fancybox');
+  });
+
+  /* fancybox */
+  $(".fancybox").each( function() {
+    var img = $(this);
+    $(this).fancybox({
+      beforeLoad: function(){
+        <!--img.removeClass('thumbnail');-->
+      },
+      afterClose: function(){
+        <!--img.addClass('thumbnail');-->
+        img.css('display', 'block');
+      },
+    });
+  });
+
+  /* add bootstrap classes */
+  $('body').wrapInner('<div class="container-fluid"><div class="row-fluid"><div class="span9">');
+  $('.row-fluid').prepend('<div class="span3"><div id="toc"></div></div>');
+
+  /* add navbar */
+  $('.container-fluid').prepend(
+'<div id="bottom-navbar" class="navbar-fixed-bottom navbar">\
+  <div class="navbar-inner">\
+    <ul class="nav pull-right">\
+      <li><a href="#" id="toggle_code">Toggle Code</a></li>\
+      <li><a href="#" id="toggle_output">Toggle Output</a></li>\
+      <li><a href="#" id="toggle_plot">Toggle Plots</a></li>\
+    </ul>\
+  </div>\
+</div>'
+);
+
+  /* global toggles FIXME explicitly toggle all on/off using global variables */
+  $('#toggle_code').click(function(){
+    $('pre code[class!=no-highlight]').parent().slideToggle();
+    return false;
+  });
+  $('#toggle_output').click(function(){
+    $('pre code[class=no-highlight]').parent().slideToggle();
+    return false;
+  });
+  $('#toggle_plot').click(function(){
+    $('img').closest('li').slideToggle();
+    return false;
+  });
+
+  /* toggle code blocks hidden by default */
+  $('pre code[class!=no-highlight]').parent().toggle();
+
+  /* add table of contents */
+  $('#toc').tocify({extendPage: false, showAndHideOnScroll: false});
+
+  /* style tables */
+  $('table').addClass('table table-striped table-bordered table-hover table-condensed')
+    .wrap('<div style="overflow: auto"/>');
+
+  /* add footer */
+  $('body').wrapInner('<div id="wrap" />');
+  $('body').append('<div id="push" />');
+  var p = $('p:contains("Author:")');
+  var last_p = p.filter(':last');
+  p.detach();
+  last_p.addClass('muted').attr('id','credit');
+  last_p.append('<p>styled with <a href="https://github.com/jimhester/knitr_bootstrap">knitr_bootstrap</a></p>');
+  last_p.appendTo("body");
+  last_p.wrap('<div id="footer"><div class="container" /></div>');
+});
+</script>
+
+<!-- knitr_bootstrap styles -->
+<style type="text/css">
+
+.container-fluid {
+  padding-left: 0 !important;
+}
+
+.toggle{
+  text-transform: capitalize;
+}
+
+ /*indent for h4 elements */
+.sub-header .sub-header .sub-header .sub-header {
+  text-indent: 50px;
+}
+
+.sub-header{
+  display:inline;
+}
+
+/* Sticky footer styles
+-------------------------------------------------- */
+* {
+  margin:0;
+}
+html,
+body {
+    height: 100%;
+    /* The html and body elements cannot have any padding or margin. */
+}
+
+/* Wrapper for page content to push down footer */
+#wrap {
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    /* Negative indent footer by it's height */
+    margin: 0 auto -60px;
+}
+
+/* Set the fixed height of the footer here */
+#push,
+#footer {
+    height: 60px;
+    padding-bottom: 60px;
+}
+
+#footer {
+  text-align: center;
+}
+/* Twitter Bootstrap Override Style */
+.nav-list > li > a, .nav-list .nav-header {
+    margin: 0px !important;
+}
+
+/* Twitter Bootstrap Override Style */
+.nav-list > li > a {
+    padding: 5px !important;
+}
+#toc ul, #toc li {
+  display: block !important;
+</style>

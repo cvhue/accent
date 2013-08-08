@@ -1,0 +1,31 @@
+```{r load_libs,  echo=FALSE, message=FALSE, warning=FALSE}
+require(thinkdata.accent)
+require(shiny)
+options(scipen=8)
+opts_chunk$set(echo=FALSE)
+opts_chunk$set(message=FALSE)
+opts_chunk$set(warning=FALSE)
+opts_chunk$set(cache=FALSE)
+opts_chunk$set(fig.width=12)
+opts_chunk$set(fig.height=6)
+```
+
+
+```{r report-title, results='asis'}
+title <- "ThinkData R Package Template Report"
+cat(paste(div(title, id="analysis-report-header", class="page-header")))
+```
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring web pages (click the **MD** toolbar button for help on Markdown).
+
+When you click the **Knit HTML** button a web page will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r}
+summary(cars)
+```
+
+You can also embed plots, for example:
+
+```{r fig.width=7, fig.height=6}
+plot(cars)
+```
