@@ -1,4 +1,3 @@
-library("ggplot2")
 # accent = (read.csv("~/src/accent/shiny/solution.csv", sep=","))
 
 schedule <- function(df, 
@@ -8,7 +7,8 @@ schedule <- function(df,
                      time = names(df)[4],
                      reverse = FALSE){
   
-
+  require("ggplot2")
+  
   lead = names(df)[1]
   subject = names(df)[2]
   day = names(df)[3]
