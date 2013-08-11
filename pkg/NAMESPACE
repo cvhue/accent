@@ -1,5 +1,7 @@
 export(buildReport)
 export(myfunction)
+export(optimize)
 export(print.myclassname)
 export(readXLSModelInput)
+export(schedule)
 export(setLogging)

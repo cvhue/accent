@@ -2,10 +2,21 @@ Accent
 ======
 R shiny app for the Accent holiday scheduling case
 
+### Make the package
+Run `./build.bash`
 
-### UPDATE ME
+### Install the package from source
+Run in **output** folder: `R CMD INSTALL thinkdata.accent_0.1.1.tar.gz`
 
+### Schedule test data
+Load accent library by `library("thinkdata.accent")`
 
-- First run setup.sh on a newly created EC2 instance in order to obtain necessary packages: `./setup.sh`
-- Copy this folder into shiny server folder: `sudo mv accent_shiny/ /var/shiny-server/www`
-- Start the shiny server: `sudo shiny-server`
+Read sample data from excel into model:
+
+    test.file <- system.file(file.path("examples","data.xls"),package="thinkdata.accent")
+    model <- readXLSModelInput(test.file)
+
+Optimize the model and show the resulting schedule
+
+    solution <- optimize(model)
+    schedule(read.csv(solution$file))
