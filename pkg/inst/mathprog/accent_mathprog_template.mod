@@ -59,7 +59,7 @@ s.t. samedaytherapist{d in D, t in T, i in I}: sum{j in J} x[i,j,d,t] <= 1;
 s.t. minhours{i in I}: sum{j in J, t in T, d in D} x[i,j,d,t] >= 3;
 /* devide the number of assignments to minimum 3 per therapist */
 
-s.t. skills{(s,j) in PS}: sum{i in I, t in T, d in D} x[i,j,d,t] == 1;
+#s.t. skills{(s,j) in PS}: sum{i in I, t in T, d in D} x[i,j,d,t] == 1;
 
 solve;
 
