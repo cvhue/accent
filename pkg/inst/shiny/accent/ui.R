@@ -1,7 +1,14 @@
 library(shiny)
+library(thinkdata.accent)
 
-therapistList = c("All",t(read.csv("therapists.csv",header = TRUE, sep = ",")[1]))
-patientList <- c("All",t(read.csv("patients.csv",header = TRUE, sep = ",")[1]))
+
+
+# Read data from examples folder: data.xls
+test.file <- system.file(file.path("examples","data.xls"),package="thinkdata.accent")
+model <- readXLSModelInput(test.file)
+therapistList = c("All",t(model$therapists[,list(therapist)]))
+patientList <- c("All",t(model$patients[,list(patient)]))
+
 
 # Define UI for application that plots random distributions 
 shinyUI(pageWithSidebar(

@@ -8,9 +8,9 @@ LazyLoad: yes
 Author: Christophe Van Huele, Kenny Helsens
 Description: Functionalities to ease computation and reporting for brand
     evolutions at MARS
-Version: 0.1.1
+Version: 0.1.2
 URL: http://thinkdata.be
-Date: 2013-08-05
+Date: 2013-08-12
 Depends:
     data.table,
     knitr,

@@ -36,6 +36,7 @@ optimize <- function(input) {
   tmp$patients <- tmpFile(paste0(tmp$ts, "_", "patients.csv"))
   tmp$patientskills <- tmpFile(paste0(tmp$ts, "_", "patientskills.csv"))
   tmp$therapists <- tmpFile(paste0(tmp$ts, "_", "therapists.csv"))
+  tmp$parameters <- tmpFile(paste0(tmp$ts, "_", "parameters.csv"))
   tmp$model <- tmpFile(paste0("accent_model_",tmp$ts,".mod"))
   tmp$solution <- tmpFile(paste0("accent_solution_",tmp$ts,".csv"))
   
@@ -46,6 +47,7 @@ optimize <- function(input) {
   tmpWrite(df=input$patients, out=tmp$patients)
   tmpWrite(df=input$patientskills, out=tmp$patientskills)
   tmpWrite(df=input$therapists, out=tmp$therapists)
+  tmpWrite(df=input$parameters, out=tmp$parameters)
   
 
   # Get the template for the accent model 
@@ -59,6 +61,7 @@ optimize <- function(input) {
       line <- gsub(pattern="\\{\\{therapists\\}\\}", replacement=tmp$therapists, x=line)
       line <- gsub(pattern="\\{\\{patientskills\\}\\}", replacement=tmp$patientskills, x=line)
       line <- gsub(pattern="\\{\\{solution\\}\\}", replacement=tmp$solution, x=line)
+      line <- gsub(pattern="\\{\\{parameters\\}\\}", replacement=tmp$parameters, x=line)
       line <- paste0(line, "\n")
       line
     }))

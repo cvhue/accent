@@ -32,6 +32,9 @@ readXLSModelInput <- function(xlsFile){
 	this$therapists <- data.table(read.xlsx2(xlsFile, sheetName="therapists"))
 	setnames(this$therapists, c("therapist", "skill"))
   
+	this$parameters <- data.table(read.xlsx2(xlsFile, sheetName="parameters"))
+	setnames(this$parameters, c("parameter", "value"))
+  
 	# TODO: this is not used? 
 	# this$links <- read.xlsx2(xlsFile, sheetName="links")
 

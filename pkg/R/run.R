@@ -1,7 +1,14 @@
-
-runShiny <- function(){
+#' @title Run Shiny app
+#'
+#' @description Sets current working directory to package dir and runs shiny app
+#'
+#' @param df dataframe consisting of lead, subject, day and time
+#' @return ggplot schedule
+#' @export
+#'
+runShinyAccent <- function(){
 	library("shiny")
-	setwd("~/src/accent/")
-	source("shiny/schedule.R")
-	runApp("shiny")
+	require("thinkdata.accent")
+	dir <- system.file(file.path("shiny","accent"),package="thinkdata.accent")
+	runApp(dir)
 }

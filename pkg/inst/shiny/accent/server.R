@@ -1,17 +1,16 @@
 library(shiny)
+library(thinkdata.accent)
 
 # Define server logic required to generate and plot a random distribution
 shinyServer(function(input, output) {
+  
+  # Read model and optimize solution
+  test.file <- system.file(file.path("examples","data.xls"),package="thinkdata.accent")
+  model <- readXLSModelInput(test.file)
+  solution <- thinkdata.accent::optimize(model)
+  solution.csv <- read.csv(solution$file)
+  plot <- schedule(solution.csv)
 
-    
-  
-  # 1. check data
-  
-  # 2. make model
-  
-  # 3. 
-  
-  source("schedule.R")
   
   therapistInput <- reactive({
     input$sel_ther
@@ -20,16 +19,16 @@ shinyServer(function(input, output) {
   patientInput <- reactive({
     input$sel_pat
   })
+  
   # display dataframe from accent
   output$summary <- renderTable({
     accent
   })
   
   output$plotT <- renderPlot({
-    source("optimize.R")
-    optimize()
-    if(therapistInput() == "All") print(schedule(accent))
-    else print(schedule(accent[accent$therapist == therapistInput(),]))
+
+    if(therapistInput() == "All") print(schedule(solution.csv))
+    else print(schedule(solution.csv[solution.csv$therapist == therapistInput(),]))
   })
   
   
