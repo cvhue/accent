@@ -37,12 +37,12 @@ optimize <- function(input) {
   tmp$patientskills <- tmpFile(paste0(tmp$ts, "_", "patientskills.csv"))
   tmp$therapists <- tmpFile(paste0(tmp$ts, "_", "therapists.csv"))
   tmp$model <- tmpFile(paste0("accent_model_",tmp$ts,".mod"))
-  tmp$solution <- tmpFile(paste0("accent_solution_",tmp$ts,".mod"))
+  tmp$solution <- tmpFile(paste0("accent_solution_",tmp$ts,".csv"))
   
-
   tmpWrite <- function(df, out){
     write.table(df, file=out, row.names=FALSE, sep=",", quote=FALSE)
   }
+
   tmpWrite(df=input$patients, out=tmp$patients)
   tmpWrite(df=input$patientskills, out=tmp$patientskills)
   tmpWrite(df=input$therapists, out=tmp$therapists)
@@ -58,7 +58,7 @@ optimize <- function(input) {
       line <- gsub(pattern="\\{\\{patients\\}\\}", replacement=tmp$patients, x=line)
       line <- gsub(pattern="\\{\\{therapists\\}\\}", replacement=tmp$therapists, x=line)
       line <- gsub(pattern="\\{\\{patientskills\\}\\}", replacement=tmp$patientskills, x=line)
-      line <- gsub(pattern="\\{\\{solution\\}\\}", replacement=tmp$patientskills, x=line)
+      line <- gsub(pattern="\\{\\{solution\\}\\}", replacement=tmp$solution, x=line)
       line <- paste0(line, "\n")
       line
     }))
@@ -69,10 +69,36 @@ optimize <- function(input) {
   # Call the system glpsol process on the model   
   system(sprintf("glpsol -m %s", tmp$model), intern=FALSE, wait=TRUE)
   
-  result <- list()
+  solution <- parseSolution(tmp$solution)
   class(result) <- c("AccentModelSolution")
   result$file <- tmp$solution
   
   tmp <- NULL
   return(result)
+}
+
+#' @title convenience function to wrap a mathprog solution outputFile into a AccentModelOutput instance.
+#' 
+#' @description desc
+#' 
+#' @param AccentModelResult
+#' 
+#' @return  AccentModelSolution instance. 
+#' @example
+#' solutionFile <- system.file(package="thinkdata.accent", "examples", "solution.csv")
+#' solution <- parseSolution(solutionFile=solutionFile) 
+#' str(solution)
+#' isTRUE("AccentModelSolution" %in% class(input))
+parseSolution <- function(solutionFile){
+  if(file.exists(solutionFile) == FALSE){
+    Log$info(sprintf("%s is not an existing file", solutionFile))
+  }
+  solution <- data.table(read.table(solutionFile, sep=",",header=TRUE)) 
+  setnames(solution, c("therapist", "patient", "day", "time"))
+  this <- list()
+  class(this) <- "AccentModelSolution"
+  
+  this$file <- solutionFile
+  this$data <- solution
+  return(this)  
 }

@@ -12,6 +12,7 @@ Version: 0.1
 URL: http://thinkdata.be
 Date: 2013-08-05
 Depends:
+    ggplot2,
     data.table,
     knitr,
     markdown,
