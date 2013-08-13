@@ -22,7 +22,7 @@ shinyServer(function(input, output) {
   
   # display dataframe from accent
   output$summary <- renderTable({
-    accent
+    solution.csv
   })
   
   output$plotT <- renderPlot({
@@ -33,8 +33,8 @@ shinyServer(function(input, output) {
   
   
   output$plotP <- renderPlot({
-    if(patientInput() == "All") print(schedule(accent,reverse=TRUE))
-    else print(schedule(accent[accent$patient == patientInput(),],reverse=TRUE))
+    if(patientInput() == "All") print(schedule(solution.csv,reverse=TRUE))
+    else print(schedule(solution.csv[solution.csv$patient == patientInput(),],reverse=TRUE))
   })
   
   
