@@ -8,8 +8,7 @@ shinyServer(function(input, output) {
   test.file <- system.file(file.path("examples","data.xls"),package="thinkdata.accent")
   model <- readXLSModelInput(test.file)
   solution <- thinkdata.accent::optimize(model)
-  solution.csv <- read.csv(solution$file)
-  plot <- schedule(solution.csv)
+  plot <- schedule(solution$data)
 
   
   therapistInput <- reactive({
@@ -22,19 +21,19 @@ shinyServer(function(input, output) {
   
   # display dataframe from accent
   output$summary <- renderTable({
-    solution.csv
+    solution$data
   })
   
   output$plotT <- renderPlot({
 
-    if(therapistInput() == "All") print(schedule(solution.csv))
-    else print(schedule(solution.csv[solution.csv$therapist == therapistInput(),]))
+    if(therapistInput() == "All") print(schedule(solution$data))
+    else print(schedule(solution$data[solution$data$therapist == therapistInput(),]))
   })
   
   
   output$plotP <- renderPlot({
-    if(patientInput() == "All") print(schedule(solution.csv,reverse=TRUE))
-    else print(schedule(solution.csv[solution.csv$patient == patientInput(),],reverse=TRUE))
+    if(patientInput() == "All") print(schedule(solution$data,reverse=TRUE))
+    else print(schedule(solution$data[solution$data$patient == patientInput(),],reverse=TRUE))
   })
   
   

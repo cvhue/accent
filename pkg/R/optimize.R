@@ -73,11 +73,9 @@ optimize <- function(input) {
   system(sprintf("glpsol -m %s", tmp$model), intern=FALSE, wait=TRUE)
   
   solution <- parseSolution(tmp$solution)
-  class(result) <- c("AccentModelSolution")
-  result$file <- tmp$solution
   
   tmp <- NULL
-  return(result)
+  return(solution)
 }
 
 #' @title convenience function to wrap a mathprog solution outputFile into a AccentModelOutput instance.
