@@ -13,6 +13,7 @@ URL: http://thinkdata.be
 Date: 2013-08-12
 Depends:
     ggplot2,
+    shiny,
     data.table,
     knitr,
     markdown,
