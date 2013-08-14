@@ -9,28 +9,31 @@ test_that("myfunction works",{
 
 # load example accent model input from package  
 # input <- test_exampleInput()
-test_exampleInput <- function(){ 
-  # Read the data.xls file from the package examples
-  test.xls <- system.file(package="thinkdata.accent", "examples", "data.xls")
-  input <- readXLSModelInput(test.xls) 
-  isTRUE("AccentModelInput" %in% class(input))
-  return(input)
-}
+# test_exampleInput <- function(){ 
+# Read the data.xls file from the package examples
+#   test.xls <- system.file(package="thinkdata.accent", "examples", "data.xls")
+#   input <- readXLSModelInput(test.xls) 
+#   isTRUE("AccentModelInput" %in% class(input))
+#   return(input)
+# }
 
 # optimize example accent data from package examples  
 # solution <- test_exampleOptimization()
 test_exampleOptimization <- function(){
   # Read solution file and wrap in a class
   isTRUE("AccentModelInput" %in% class(input))
-  result <- optimize(input) 
-  return(result)
+  result <- optimizeAccentModel(input) 
 }
 
 # load example accent model solution from package examples
 # solution <- test_exampleSolution()
-test_exampleSolution <- function(){
-  solutionFile <- system.file(package="thinkdata.accent", "examples", "solution.csv")
-  solution <- parseSolution(solutionFile=solutionFile) 
-  return(solution)  
-}
+# test_exampleSolution <- function(){
+#   solutionFile <- system.file(package="thinkdata.accent", "examples", "solution.csv")
+#   solution <- parseSolution(solutionFile=solutionFile) 
+# }
 
+# generate random input
+test_randomInput(){
+  input <- randomAccentModelInput()
+  str(input)
+}
