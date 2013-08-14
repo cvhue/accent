@@ -11,12 +11,11 @@
 #' @export 
 #' @return  AccentModelSolution instance. 
 #' @example
-#' test.xls <- system.file(package="thinkdata.accent", "examples", "data.xls")
-#' input <- readXLSModelInput(xlsFile=test.xls) 
+#' input <- randomAccentModelInput()
 #' isTRUE("AccentModelInput" %in% class(input))
 #' str(input)
 #' result <- optimize(input)
-optimize <- function(input) {
+optimizeAccentModel <- function(input) {
   if("AccentModelInput" %in% class(input) == FALSE){
     Log$info("input is not of type AccentModelInput. ")
     return(NA)
@@ -73,6 +72,7 @@ optimize <- function(input) {
   system(sprintf("glpsol -m %s", tmp$model), intern=FALSE, wait=TRUE)
   
   solution <- parseSolution(tmp$solution)
+  solution$input <- input
   
   tmp <- NULL
   return(solution)
@@ -84,7 +84,8 @@ optimize <- function(input) {
 #' 
 #' @param AccentModelResult
 #' 
-#' @return  AccentModelSolution instance. 
+#' @return  AccentModelSolution instance.
+#' @export 
 #' @example
 #' solutionFile <- system.file(package="thinkdata.accent", "examples", "solution.csv")
 #' solution <- parseSolution(solutionFile=solutionFile) 
