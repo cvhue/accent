@@ -1,15 +1,6 @@
 library(shiny)
 library(thinkdata.accent)
 
-
-
-# Read data from examples folder: data.xls
-test.file <- system.file(file.path("examples","data.xls"),package="thinkdata.accent")
-model <- readXLSModelInput(test.file)
-therapistList = c("All",t(model$therapists[,list(therapist)]))
-patientList <- c("All",t(model$patients[,list(patient)]))
-
-
 # Define UI for application that plots random distributions 
 shinyUI(pageWithSidebar(
   
