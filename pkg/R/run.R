@@ -13,7 +13,6 @@
 runShinyAccent <- function(){
 	library("shiny")
 	require("thinkdata.accent")
-  Log$info()
   dir <- system.file(package="thinkdata.accent", "shiny/accent")
 	shiny::runApp(dir)
 }

@@ -85,3 +85,75 @@ randomAccentModelInput <- function(){
   class(this) <- c("AccentModelInput")
   this
 }
+
+
+#' @title read accent model input from an JSON input file  
+#' 
+#' @description the simple JSON Model input has therapists, patients, patientskills and parameters.
+#' This information is sufficient for the accent problem.
+#' 
+#' @param jsonFile
+#' 
+#' @export 
+#' @return  AccentModelInput instance. This instance contains data.table instances extracted from the JSON file.
+#' @example 
+#' \dontrun{
+#'   test.json <- system.file(package="thinkdata.accent", "examples", "data.json")
+#'   input <- readSimpleJSONModelInput(jsonFile=test.json) 
+#'   isTRUE("AccentModelInput" %in% class(input))
+#'   str(input)
+#' }
+readSimpleJSONModelInput <- function(jsonFile){
+  json <- fromJSON(test.json)
+
+  # Simple validation
+  if(("patients" %in% names(this)) == FALSE){
+    Log$info("patients should be top level element in JSON")
+    return(NA)
+  }
+  if(("patientskills" %in% names(this)) == FALSE){
+    Log$info("patientskills should be top level element in JSON")
+    return(NA)
+  }
+  if(("therapists" %in% names(this)) == FALSE){
+    Log$info("therapists should be top level element in JSON")
+    return(NA)
+  }
+  if(("parameters" %in% names(this)) == FALSE){
+    Log$info("parameters should be top level element in JSON")
+    return(NA)
+  }
+  
+  this <- list()
+  this$patients <- as.data.table(json$patients)
+  this$therapists <- as.data.table(json$therapists)
+  this$patientskills <- as.data.table(json$patientskills)
+  this$parameters <- as.data.table(json$parameters)
+  class(this) <- c("AccentModelInput")
+  this
+}
+
+
+
+
+#' @title read accent model input from an SPLAN JSON input file  
+#' 
+#' @description the SPLAN JSON file can describe any Input Model.
+#' For the AccentInputModel, onlythe therapists, patients, patientskills and parameters
+#' are extracted from the SPLAN descriptor
+#' @param jsonFile
+#' 
+#' @export 
+#' @return  AccentModelInput instance. This instance contains data.table instances extracted from the JSON file.
+#' @example 
+#' \dontrun{
+#'   test.json <- system.file(package="thinkdata.accent", "examples", "data.json")
+#'   input <- readJSONModelInput(jsonFile=test.json) 
+#'   isTRUE("AccentModelInput" %in% class(input))
+#'   str(input)
+#' }
+
+readSplanJSONInput <- function(jsonFile){
+  
+}
+

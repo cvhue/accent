@@ -72,7 +72,7 @@ optimizeAccentModel <- function(input) {
   system(sprintf("glpsol -m %s", tmp$model), intern=FALSE, wait=TRUE)
   
   solution <- parseSolution(tmp$solution)
-  solution$input <- input
+#   solution$input <- input
   
   tmp <- NULL
   return(solution)
