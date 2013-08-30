@@ -19,7 +19,8 @@ Depends:
     markdown,
     Rglpk,
     xlsx,xlsxjars,
-    rJava
+    rJava,
+    RJSONIO
 Suggests:
     testthat,
 Collate:
