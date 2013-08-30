@@ -1,0 +1,3 @@
+require(thinkdata.accent)
+runShinyAccent()
+
