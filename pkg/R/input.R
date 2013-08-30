@@ -107,19 +107,19 @@ readSimpleJSONModelInput <- function(jsonFile){
   json <- fromJSON(test.json)
 
   # Simple validation
-  if(("patients" %in% names(this)) == FALSE){
+  if(("patients" %in% names(json)) == FALSE){
     Log$info("patients should be top level element in JSON")
     return(NA)
   }
-  if(("patientskills" %in% names(this)) == FALSE){
+  if(("patientskills" %in% names(json)) == FALSE){
     Log$info("patientskills should be top level element in JSON")
     return(NA)
   }
-  if(("therapists" %in% names(this)) == FALSE){
+  if(("therapists" %in% names(json)) == FALSE){
     Log$info("therapists should be top level element in JSON")
     return(NA)
   }
-  if(("parameters" %in% names(this)) == FALSE){
+  if(("parameters" %in% names(json)) == FALSE){
     Log$info("parameters should be top level element in JSON")
     return(NA)
   }
