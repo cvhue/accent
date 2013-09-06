@@ -1,0 +1,17 @@
+{
+ "patients": {
+ "patient": [ "P1", "P2", "P3", "P4", "P5", "P6", "P7", "P8", "P9" ] 
+},
+"patientskills": {
+ "patient": [ "P9", "P2", "P8", "P8", "P6", "P9", "P1", "P5", "P6", "P9", "P8", "P1", "P5" ],
+"skill": [ 1, 1, 3, 2, 3, 3, 3, 3, 2, 2, 1, 1, 2 ] 
+},
+"therapists": {
+ "therapist": [ "A", "B", "C" ],
+"skill": [ 1, 2, 3 ] 
+},
+"parameters": {
+ "parameter": [ "minhours", "preference" ],
+"value": [      1,    0.5 ] 
+} 
+}

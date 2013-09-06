@@ -5,10 +5,14 @@
 #' @param df dataframe consisting of lead, subject, day and time
 #' @return ggplot schedule
 #' @export
+#' @example
+#' \dontrun{
+#' runShinyAccent()	
+#' }
 #'
 runShinyAccent <- function(){
 	library("shiny")
 	require("thinkdata.accent")
-	dir <- system.file(file.path("shiny","accent"),package="thinkdata.accent")
-	runApp(dir)
+  dir <- system.file(package="thinkdata.accent", "shiny/accent")
+	shiny::runApp(dir)
 }

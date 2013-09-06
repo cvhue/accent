@@ -11,11 +11,13 @@
 #' }
 #' @export 
 #' @return  AccentModelInput instance. This instance contains 2 data.table instances extracted from the given XLS file.
-#' @example
-#' test.xls <- system.file(package="thinkdata.accent", "examples", "data.xls")
-#' input <- readXLSModelInput(xlsFile=test.xls) 
-#' isTRUE("AccentModelInput" %in% class(input))
-#' str(input)
+#' @example 
+#' \dontrun{
+#'   test.xls <- system.file(package="thinkdata.accent", "examples", "data.xls")
+#'   input <- readXLSModelInput(xlsFile=test.xls) 
+#'   isTRUE("AccentModelInput" %in% class(input))
+#'   str(input)
+#' }
 readXLSModelInput <- function(xlsFile){
 	require("xlsx")
 	
@@ -47,9 +49,123 @@ readXLSModelInput <- function(xlsFile){
 	this$patientunavailabilities <- data.table(read.xlsx2(xlsFile, sheetName="patientunavailabilities"))
 	setnames(this$patientunavailabilities, c("patient", "day","time"))
 
-  
 	class(this) <- c("AccentModelInput")
 	this
 }
 
+
+#' @title generate a random accent model input
+#' @return  AccentModelInput instance. This instance contains 2 data.table instances extracted from the given XLS file.
+#' @export 
+#' @examples
+#' input <- randomAccentModelInput() 
+#' isTRUE("AccentModelInput" %in% class(input))
+#' str(input)
+randomAccentModelInput <- function(){
+  Log$info("creating random AccentModelInput instance")
+  patients <- data.table(patient=paste0("P", 1:as.integer(runif(n=1,min=5,max=10))))
+  patientskills <- data.table(
+    patient=paste0("P", as.integer(runif(n=nrow(patients),min=1,max=10))),
+    skill=as.integer(runif(n=nrow(patients)*2, min=1, max=4))
+    )
+  patientskills <- unique(patientskills)
+
+# FIXME: therapist can now only have one skill, this randomizer has multiple skills per therapist.
+#   therapists <- data.table(
+#     therapist=paste0("Therapist-", rep(LETTERS[1:3],3)),
+#     skill=as.integer(runif(9, 1,100)%%3)+1
+#   )  
+#   therapists <- unique(therapists)
+#   
+  therapists <- data.table(
+        therapist=LETTERS[1:3],
+        skill=1:3
+ )  
+    
+  
+  parameters <- data.table(
+    parameter=c("minhours", "preference"),
+    value=c(1, 0.5)
+  ) 
+
+  this <- list()
+  
+  this$patients <- patients
+  this$patientskills <- patientskills
+  this$therapists <- therapists
+  this$parameters <- parameters
+  class(this) <- c("AccentModelInput")
+  this
+}
+
+
+#' @title read accent model input from an JSON input file  
+#' 
+#' @description the simple JSON Model input has therapists, patients, patientskills and parameters.
+#' This information is sufficient for the accent problem.
+#' 
+#' @param jsonFile
+#' 
+#' @export 
+#' @return  AccentModelInput instance. This instance contains data.table instances extracted from the JSON file.
+#' @example 
+#' \dontrun{
+#'   test.json <- system.file(package="thinkdata.accent", "examples", "data.json")
+#'   input <- readSimpleJSONModelInput(jsonFile=test.json) 
+#'   isTRUE("AccentModelInput" %in% class(input))
+#'   str(input)
+#' }
+readSimpleJSONModelInput <- function(jsonFile){
+  json <- fromJSON(test.json)
+
+  # Simple validation
+  if(("patients" %in% names(json)) == FALSE){
+    Log$info("patients should be top level element in JSON")
+    return(NA)
+  }
+  if(("patientskills" %in% names(json)) == FALSE){
+    Log$info("patientskills should be top level element in JSON")
+    return(NA)
+  }
+  if(("therapists" %in% names(json)) == FALSE){
+    Log$info("therapists should be top level element in JSON")
+    return(NA)
+  }
+  if(("parameters" %in% names(json)) == FALSE){
+    Log$info("parameters should be top level element in JSON")
+    return(NA)
+  }
+  
+  this <- list()
+  this$patients <- as.data.table(json$patients)
+  this$therapists <- as.data.table(json$therapists)
+  this$patientskills <- as.data.table(json$patientskills)
+  this$parameters <- as.data.table(json$parameters)
+  class(this) <- c("AccentModelInput")
+  this
+}
+
+
+
+
+#' @title read accent model input from an SPLAN JSON input file  
+#' 
+#' @description the SPLAN JSON file can describe any Input Model.
+#' For the AccentInputModel, onlythe therapists, patients, patientskills and parameters
+#' are extracted from the SPLAN descriptor
+#' @param jsonFile
+#' 
+#' @export 
+#' @return  AccentModelInput instance. This instance contains data.table instances extracted from the JSON file.
+#' @example 
+#' \dontrun{
+#'   test.json <- system.file(package="thinkdata.accent", "examples", "data.json")
+#'   input <- readJSONModelInput(jsonFile=test.json) 
+#'   isTRUE("AccentModelInput" %in% class(input))
+#'   str(input)
+#' }
+
+readSplanJSONInput <- function(jsonFile){
+  
+}
 

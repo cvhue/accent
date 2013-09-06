@@ -12,23 +12,26 @@ Version: 0.1.2
 URL: http://thinkdata.be
 Date: 2013-08-12
 Depends:
+    ggplot2,
+    shiny,
     data.table,
     knitr,
     markdown,
     Rglpk,
     xlsx,xlsxjars,
-    rJava
+    rJava,
+    RJSONIO
 Suggests:
     testthat,
 Collate:
     'pkg.R'
     'data.R'
     'utils.R'
+    'graph.R'
     'onload.R'
     'reporter.R'
     'logging.R'
     'optimize.R'
     'run.R'
     'schedule.R'
-    'test.R'
     'input.R'

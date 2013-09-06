@@ -11,12 +11,11 @@
 #' @export 
 #' @return  AccentModelSolution instance. 
 #' @example
-#' test.xls <- system.file(package="thinkdata.accent", "examples", "data.xls")
-#' input <- readXLSModelInput(xlsFile=test.xls) 
+#' input <- randomAccentModelInput()
 #' isTRUE("AccentModelInput" %in% class(input))
 #' str(input)
 #' result <- optimize(input)
-optimize <- function(input) {
+optimizeAccentModel <- function(input) {
   if("AccentModelInput" %in% class(input) == FALSE){
     Log$info("input is not of type AccentModelInput. ")
     return(NA)
@@ -46,10 +45,10 @@ optimize <- function(input) {
   tmp$model <- tmpFile(paste0("accent_model_",tmp$ts,".mod"))
   tmp$solution <- tmpFile(paste0("accent_solution_",tmp$ts,".csv"))
   
-
   tmpWrite <- function(df, out){
     write.table(df, file=out, row.names=FALSE, sep=",", quote=FALSE)
   }
+
   tmpWrite(df=input$patients, out=tmp$patients)
   tmpWrite(df=input$patientskills, out=tmp$patientskills)
   tmpWrite(df=input$therapists, out=tmp$therapists)
@@ -88,10 +87,36 @@ optimize <- function(input) {
   # Call the system glpsol process on the model   
   system(sprintf("glpsol -m %s", tmp$model), intern=FALSE, wait=TRUE)
   
-  result <- list()
-  class(result) <- c("AccentModelSolution")
-  result$file <- tmp$solution
+  solution <- parseSolution(tmp$solution)
+#   solution$input <- input
   
   tmp <- NULL
-  return(result)
+  return(solution)
+}
+
+#' @title convenience function to wrap a mathprog solution outputFile into a AccentModelOutput instance.
+#' 
+#' @description desc
+#' 
+#' @param AccentModelResult
+#' 
+#' @return  AccentModelSolution instance.
+#' @export 
+#' @example
+#' solutionFile <- system.file(package="thinkdata.accent", "examples", "solution.csv")
+#' solution <- parseSolution(solutionFile=solutionFile) 
+#' str(solution)
+#' isTRUE("AccentModelSolution" %in% class(input))
+parseSolution <- function(solutionFile){
+  if(file.exists(solutionFile) == FALSE){
+    Log$info(sprintf("%s is not an existing file", solutionFile))
+  }
+  solution <- data.table(read.table(solutionFile, sep=",",header=TRUE)) 
+  setnames(solution, c("therapist", "patient", "day", "time"))
+  this <- list()
+  class(this) <- "AccentModelSolution"
+  
+  this$file <- solutionFile
+  this$data <- solution
+  return(this)  
 }
