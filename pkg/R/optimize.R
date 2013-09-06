@@ -37,6 +37,12 @@ optimize <- function(input) {
   tmp$patientskills <- tmpFile(paste0(tmp$ts, "_", "patientskills.csv"))
   tmp$therapists <- tmpFile(paste0(tmp$ts, "_", "therapists.csv"))
   tmp$parameters <- tmpFile(paste0(tmp$ts, "_", "parameters.csv"))
+  tmp$patientpreferences <- tmpFile(paste0(tmp$ts, "_", "PP.csv"))
+  tmp$patientunavailabilities <- tmpFile(paste0(tmp$ts, "_", "PU.csv"))
+  tmp$therapistpreferences <- tmpFile(paste0(tmp$ts, "_", "TP.csv"))
+  tmp$therapistunavailabilities <- tmpFile(paste0(tmp$ts, "_", "TU.csv"))
+  
+  
   tmp$model <- tmpFile(paste0("accent_model_",tmp$ts,".mod"))
   tmp$solution <- tmpFile(paste0("accent_solution_",tmp$ts,".csv"))
   
@@ -48,6 +54,10 @@ optimize <- function(input) {
   tmpWrite(df=input$patientskills, out=tmp$patientskills)
   tmpWrite(df=input$therapists, out=tmp$therapists)
   tmpWrite(df=input$parameters, out=tmp$parameters)
+  tmpWrite(df=input$patientpreferences, out=tmp$patientpreferences)
+  tmpWrite(df=input$patientunavailabilities, out=tmp$patientunavailabilities)
+  tmpWrite(df=input$therapistpreferences, out=tmp$therapistpreferences)
+  tmpWrite(df=input$therapistunavailabilities, out=tmp$therapistunavailabilities)
   
 
   # Get the template for the accent model 
@@ -62,12 +72,18 @@ optimize <- function(input) {
       line <- gsub(pattern="\\{\\{patientskills\\}\\}", replacement=tmp$patientskills, x=line)
       line <- gsub(pattern="\\{\\{solution\\}\\}", replacement=tmp$solution, x=line)
       line <- gsub(pattern="\\{\\{parameters\\}\\}", replacement=tmp$parameters, x=line)
+      line <- gsub(pattern="\\{\\{patientpreferences\\}\\}", replacement=tmp$patientpreferences, x=line)
+      line <- gsub(pattern="\\{\\{patientunavailabilities\\}\\}", replacement=tmp$patientunavailabilities, x=line)
+      line <- gsub(pattern="\\{\\{therapistpreferences\\}\\}", replacement=tmp$therapistpreferences, x=line)
+      line <- gsub(pattern="\\{\\{therapistunavailabilities\\}\\}", replacement=tmp$therapistunavailabilities, x=line)
+      
       line <- paste0(line, "\n")
       line
     }))
   
   # Write the filtered file into a MathProg compatible model file  
   cat(tmp$model.filtered, file=tmp$model, fill=TRUE)
+  
   
   # Call the system glpsol process on the model   
   system(sprintf("glpsol -m %s", tmp$model), intern=FALSE, wait=TRUE)

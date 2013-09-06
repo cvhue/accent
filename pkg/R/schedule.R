@@ -11,7 +11,10 @@ schedule <- function(df,
                      subject = names(df)[2],
                      day = names(df)[3],
                      time = names(df)[4],
-                     reverse = FALSE){
+                     reverse = FALSE,
+                     unavailable = NULL
+                     
+                     ){
   
   require("ggplot2")
   
@@ -39,10 +42,17 @@ schedule <- function(df,
     scale_y_discrete(limits = rev(timeslots))
   
   p<- p + labs(title = "Staff schedule") +  xlab("Day of week") + ylab("") + theme(axis.text.x = element_text( hjust = -3))
-  
+  if(unavailable != NULL){
+    p = p + geom_rect(unavailable, aes(x=))
+  }
   if(reverse==TRUE){
      p = p + labs(title = "Patient schedule") 
+     if(unavailable != NULL){
+       p = p + geom_rect(unavailable, aes(x=))
+     }
   } 
+  
+  
   
   return(p)
 }

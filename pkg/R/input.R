@@ -35,9 +35,19 @@ readXLSModelInput <- function(xlsFile){
 	this$parameters <- data.table(read.xlsx2(xlsFile, sheetName="parameters"))
 	setnames(this$parameters, c("parameter", "value"))
   
-	# TODO: this is not used? 
-	# this$links <- read.xlsx2(xlsFile, sheetName="links")
+	this$therapistpreferences <- data.table(read.xlsx2(xlsFile, sheetName="therapistpreferences"))
+	setnames(this$therapistpreferences, c("therapist", "day","time"))
+	
+	this$patientpreferences <- data.table(read.xlsx2(xlsFile, sheetName="patientpreferences"))
+	setnames(this$patientpreferences, c("patient", "day","time"))
+	
+	this$therapistunavailabilities <- data.table(read.xlsx2(xlsFile, sheetName="therapistunavailabilities"))
+	setnames(this$therapistunavailabilities, c("therapist", "day","time"))
+	
+	this$patientunavailabilities <- data.table(read.xlsx2(xlsFile, sheetName="patientunavailabilities"))
+	setnames(this$patientunavailabilities, c("patient", "day","time"))
 
+  
 	class(this) <- c("AccentModelInput")
 	this
 }
