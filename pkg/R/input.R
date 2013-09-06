@@ -116,6 +116,8 @@ randomAccentModelInput <- function(){
 #'   str(input)
 #' }
 readSimpleJSONModelInput <- function(jsonFile){
+  Log$info("creating AccentModelInput instance from SimpleJSON")
+  
   json <- fromJSON(test.json)
 
   # Simple validation
@@ -159,13 +161,71 @@ readSimpleJSONModelInput <- function(jsonFile){
 #' @return  AccentModelInput instance. This instance contains data.table instances extracted from the JSON file.
 #' @example 
 #' \dontrun{
-#'   test.json <- system.file(package="thinkdata.accent", "examples", "data.json")
-#'   input <- readJSONModelInput(jsonFile=test.json) 
+#'   test.json <- system.file(package="thinkdata.accent", "examples", "splan_data.json")
+#'   input <- readSplanJSONInput(jsonFile=test.json) 
 #'   isTRUE("AccentModelInput" %in% class(input))
 #'   str(input)
 #' }
-
 readSplanJSONInput <- function(jsonFile){
+  Log$info("creating random AccentModelInput from SlanJSON")
   
+  tmp <- list()
+  tmp$json <- fromJSON(test.json)
+#   tmp$json <- fromJSON("/Users/kennyhelsens/accent/pkg/inst/examples/splan_data.json")
+  
+  
+  if(("accent" %in% json$general) == FALSE){
+    Log$info("Splan JSON problem is not of type accent!")
+    return(NA)
+  }
+  
+  # Simple validation
+  splan.types <- c("general", "goal","location","lead","skill","constraint","subject")
+  tmp$splan.types <- intersect(splan.types, names(tmp$json))
+  
+  if(length(tmp$splan.types) != 7){
+    Log$info("input json does not have all required Splan types")
+    return(NA)
+  }
+  
+  this <- list()
+  
+  # extract the patients from the subjects
+  this$patients <- data.table(patient = sapply(tmp$json$subject, function(x){x[["name"]]}))
+  
+  # extract the therapists from the leads
+  this$therapists <- 
+    data.table(do.call(rbind, 
+                       lapply(tmp$json$lead, 
+                              function(x){expand.grid(x[["name"]], x[["skills"]])}
+                       )
+    )
+    )
+  setnames(this$therapists, c("therapist", "skill"))
+  
+  
+  
+  # extract the patientskills from the subjects
+  this$patientskills <- 
+    data.table(do.call(rbind, 
+           lapply(tmp$json$subject, 
+                  function(x){expand.grid(x[["name"]], x[["skills"]])}
+                  )
+           )
+       )
+  setnames(this$patientskills, c("patient", "skill"))
+
+  # extract the parameters from the goals
+  this$parameters <-
+    data.table(do.call(rbind,
+             lapply(tmp$json$goal, 
+                    function(x){expand.grid(x[["type"]], x[["value"]])}
+                    )
+             )
+     )
+  setnames(this$parameters, c("parameter", "value"))
+  
+  class(this) <- c("AccentModelInput")
+  this
 }
 
