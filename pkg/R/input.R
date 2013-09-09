@@ -21,7 +21,7 @@
 readXLSModelInput <- function(xlsFile){
 	require("xlsx")
 	
-	Log$info(sprintf("reading accent model input from %s ", xlsFile))
+  Log$info(sprintf("reading accent model input from %s ", xlsFile))
 
 	this <- list()
 	
@@ -119,30 +119,38 @@ readSimpleJSONModelInput <- function(jsonFile){
   Log$info("creating AccentModelInput instance from SimpleJSON")
   
   json <- fromJSON(test.json)
+  tmp <- list()
 
-  # Simple validation
-  if(("patients" %in% names(json)) == FALSE){
-    Log$info("patients should be top level element in JSON")
-    return(NA)
-  }
-  if(("patientskills" %in% names(json)) == FALSE){
-    Log$info("patientskills should be top level element in JSON")
-    return(NA)
-  }
-  if(("therapists" %in% names(json)) == FALSE){
-    Log$info("therapists should be top level element in JSON")
-    return(NA)
-  }
-  if(("parameters" %in% names(json)) == FALSE){
-    Log$info("parameters should be top level element in JSON")
+# Simple validation
+  tmp$simple.json.types <- c(
+    "patients",
+    "patientskills",
+    "therapists",
+    "parameters",
+    "patientpreferences",
+    "therapistpreferences",
+    "patientunavailabilities",
+    "therapistunavailabilities"
+  )
+
+  tmp$simple.json.intersect <- intersect(tmp$simple.json.types, names(json))
+  
+  if(length(tmp$simple.json.intersect) != 8){
+    Log$info("input json does not have all required Splan types")
     return(NA)
   }
   
+
   this <- list()
   this$patients <- as.data.table(json$patients)
   this$therapists <- as.data.table(json$therapists)
   this$patientskills <- as.data.table(json$patientskills)
   this$parameters <- as.data.table(json$parameters)
+  
+  this$patientpreferences <- as.data.table(json$patientpreferences)
+  this$therapistpreferences <- as.data.table(json$therapistpreferences)
+  this$patientunavailabilities <- as.data.table(json$patientunavailabilities)
+  this$therapistunavailabilities <- as.data.table(json$therapistunavailabilities)
   class(this) <- c("AccentModelInput")
   this
 }

@@ -35,3 +35,4 @@ Collate:
     'run.R'
     'schedule.R'
     'input.R'
+    'test.R'
