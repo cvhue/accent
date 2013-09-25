@@ -175,14 +175,14 @@ readSimpleJSONModelInput <- function(jsonFile){
 #'   str(input)
 #' }
 readSplanJSONInput <- function(jsonFile){
-  Log$info("creating random AccentModelInput from SlanJSON")
+  Log$info("creating AccentModelInput from SpanJSON")
   
   tmp <- list()
-  tmp$json <- fromJSON(test.json)
+  tmp$json <- fromJSON(jsonFile)
 #   tmp$json <- fromJSON("/Users/kennyhelsens/accent/pkg/inst/examples/splan_data.json")
   
   
-  if(("accent" %in% json$general) == FALSE){
+  if(("accent" %in% tmp$json$general) == FALSE){
     Log$info("Splan JSON problem is not of type accent!")
     return(NA)
   }
@@ -197,6 +197,16 @@ readSplanJSONInput <- function(jsonFile){
   }
   
   this <- list()
+  
+  tmp$subject <- as.data.table(t(as.data.table(tmp$json$subject)))
+  tmp$subject <- data.table(uid=unlist(tmp$subject$V1), name=unlist(tmp$subject$V2))
+  setnames(tmp$subject, c("uid", "name"))
+  setkey(tmp$subject, "uid")
+  
+  tmp$lead <- as.data.table(t(as.data.table(tmp$json$lead)))
+  tmp$lead <- data.table(uid=unlist(tmp$lead$V1), name=unlist(tmp$lead$V2))
+  setnames(tmp$lead, c("uid", "name"))
+  setkey(tmp$lead, "uid")
   
   # extract the patients from the subjects
   this$patients <- data.table(patient = sapply(tmp$json$subject, function(x){x[["name"]]}))
@@ -232,7 +242,52 @@ readSplanJSONInput <- function(jsonFile){
              )
      )
   setnames(this$parameters, c("parameter", "value"))
+
   
+ 
+  # helper function to convert time constraints from Splan JSON into a tabular format
+  extractSplanTimeConstraints <- function(
+    constraint.type="time_yes",
+    group="subject",
+    person="patient"){
+
+    inner <- list()
+    inner$data <- 
+      data.table(
+        do.call(rbind, lapply(tmp$json$constraint[[group]], FUN=function(x){
+          if(x[["type"]] == constraint.type){
+            expand.grid(x[["uid"]], x[["day"]], x[["block"]])
+          } else{
+            c(NA,NA)
+          }
+        })
+        )
+      )
+
+    setnames(inner$data, c("uid", "day","time"))
+    setkey(inner$data, "uid")
+    inner$data <- na.omit(inner$data)
+    inner$data <- merge(inner$data, tmp[[group]])
+    inner$data$uid <- NULL
+    setnames(inner$data, c("name"), c(person))
+    inner$data <- inner$data[,c(3,1,2), with=FALSE]
+    inner$data
+
+  }
+  
+  this$patientpreferences <- 
+    extractSplanTimeConstraints(constraint.type="time_yes", group="subject", person="patient")
+  
+  this$patientunavailabilities <- 
+    extractSplanTimeConstraints(constraint.type="time_no", group="subject", person="patient")
+
+  this$therapistpreferences <- 
+    extractSplanTimeConstraints(constraint.type="time_yes", group="lead", person="therapist")
+  
+  this$therapistunavailabilities <-
+    extractSplanTimeConstraints(constraint.type="time_no", group="lead", person="therapist")
+  
+    
   class(this) <- c("AccentModelInput")
   this
 }

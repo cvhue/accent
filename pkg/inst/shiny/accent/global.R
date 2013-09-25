@@ -7,12 +7,12 @@ setLogging("info", logger="dateLogger")
 # input <- randomAccentModelInput()
 
 ### SPLAN JSON
-# test.json <- system.file(package="thinkdata.accent", "examples", "splan_data.json")
-# input <- readSplanJSONInput(jsonFile=test.json)
+test.json <- system.file(package="thinkdata.accent", "examples", "splan_data.json")
+input <- readSplanJSONInput(jsonFile=test.json)
 
 ### SIMPLE JSON
-test.json <- system.file(package="thinkdata.accent", "examples", "data.json")
-input <- readSimpleJSONModelInput(jsonFile=test.json) 
+# test.json <- system.file(package="thinkdata.accent", "examples", "data.json")
+# input <- readSimpleJSONModelInput(jsonFile=test.json) 
 
 # str(input)
 # str(splaninput)
