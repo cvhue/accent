@@ -20,7 +20,9 @@ Depends:
     Rglpk,
     xlsx,xlsxjars,
     rJava,
-    RJSONIO
+    RJSONIO,
+    Rook,
+    httpuv
 Suggests:
     testthat,
 Collate:
@@ -36,3 +38,4 @@ Collate:
     'schedule.R'
     'input.R'
     'test.R'
+    'service.R'
