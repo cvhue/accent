@@ -174,7 +174,7 @@ readSplanJSONInput <- function(jsonFile){
 #   tmp$json <- fromJSON("/Users/kennyhelsens/accent/pkg/inst/examples/splan_data.json")
   
   
-  if(("accent" %in% json$general) == FALSE){
+  if(("accent" %in% tmp$json$general$problem) == FALSE){
     Log$info("Splan JSON problem is not of type accent!")
     return(NA)
   }

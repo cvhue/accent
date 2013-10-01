@@ -1,4 +1,5 @@
 library(thinkdata.accent)
+require(RJSONIO)
 
 setLogging("info", logger="dateLogger")
 
@@ -7,12 +8,16 @@ setLogging("info", logger="dateLogger")
 # input <- randomAccentModelInput()
 
 ### SPLAN JSON
-test.json <- system.file(package="thinkdata.accent", "examples", "splan_data.json")
-input <- readSplanJSONInput(jsonFile=test.json)
+# test.json <- system.file(package="thinkdata.accent", "examples", "splan_data.json")
+# input <- readSplanJSONInput(jsonFile=test.json)
 
 ### SIMPLE JSON
 # test.json <- system.file(package="thinkdata.accent", "examples", "data.json")
 # input <- readSimpleJSONModelInput(jsonFile=test.json) 
+
+### EXCEL INPUT
+test.xls <- system.file(package="thinkdata.accent", "examples", "data.xls")
+input <- readXLSModelInput(xlsFile=test.xls) 
 
 # str(input)
 # str(splaninput)

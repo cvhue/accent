@@ -93,6 +93,10 @@ maximize assignments:   sum{i in I, j in J, t in T, d in D}  par_values["prefere
 s.t. week{j in J,s in S}: sum{i in I, d in D, t in T} skill_therapist[i,s] * x[i,j,d,t] == skill_patient[j,s];
 /* weekly schedule every patient once i */
 
+
+s.t. samedaypatient{d in D, t in T, j in J}: sum{i in I} x[i,j,d,t] <= 1;
+/* maximally one assignment per day-time for a therapist*/
+
 s.t. samedaytherapist{d in D, t in T, i in I}: sum{j in J} x[i,j,d,t] <= 1;
 /* maximally one assignment per day-time for a therapist*/
 

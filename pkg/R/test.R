@@ -11,3 +11,14 @@ test <- function(){
 	schedule(read.csv(solution$file))
   
 }
+
+
+testSchedule <- function(){
+  source("pkg/R/schedule.R")
+  test.file <- system.file(file.path("examples","data.xls"),package="thinkdata.accent")
+  model <- readXLSModelInput(test.file)
+  solution <- optimize(model)
+  schedule(read.csv(solution$file))
+  
+  
+}

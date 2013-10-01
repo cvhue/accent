@@ -35,23 +35,24 @@ schedule <- function(df,
   df$dayf<-factor(df[,day],levels=1:7,labels=days,ordered=TRUE)
   df$timef<-factor(df[,time],levels=rev(1:5),labels=rev(timeslots),ordered=TRUE)
   
-  p = ggplot(df,aes_string(x="dayf", y="timef",fill=subject,xmin=day,xmax="day.end",ymin=time,ymax="time.end")) + 
+  p = ggplot(df,aes_string(x="dayf", y="timef",label=subject,fill=subject,xmin=day,xmax="day.end",ymin=time,ymax="time.end")) + 
     geom_rect(colour = "white") + labs(title = "Staff schedule") +  
-    xlab("Day of week") + ylab("") + theme(axis.text.x = element_text( hjust = -3)) + 
+    xlab("Day of week") + ylab("") + 
     facet_grid(as.formula(sprintf('%s~.',lead))) + coord_cartesian(xlim = c(1, 6),ylim=c(1,5)) + 
-    scale_y_discrete(limits = rev(timeslots))
+    scale_y_discrete(limits = rev(timeslots)) +scale_x_discrete(aes(x=day+1,labels = "dayf"))
+  p + geom_text(aes(x=day+0.5,y=time+0.5),size=4)
+  
   
   p<- p + labs(title = "Staff schedule") +  xlab("Day of week") + ylab("") + theme(axis.text.x = element_text( hjust = -3))
-  if(unavailable != NULL){
-    p = p + geom_rect(unavailable, aes(x=))
+  if(!is.null(unavailable)){
+    #p = p + geom_rect(unavailable, aes(x=))
   }
   if(reverse==TRUE){
      p = p + labs(title = "Patient schedule") 
-     if(unavailable != NULL){
-       p = p + geom_rect(unavailable, aes(x=))
+     if(!is.null(unavailable)){
+       #p = p + geom_rect(unavailable, aes(x=))
      }
   } 
-  
   
   
   return(p)

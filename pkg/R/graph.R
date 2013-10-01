@@ -72,6 +72,7 @@ drawSchedule <- function(solution, subset=NULL, type="patient"){
   p <-  ggplot(plot.data$df, aes_string(x = "dayf",
                        y = "timef",
                        fill = plot.data$fill,
+                       label = subject,
                        xmin = "day",
                        xmax = "day.end",
                        ymin = "time",
@@ -83,6 +84,8 @@ drawSchedule <- function(solution, subset=NULL, type="patient"){
   p <- p + ylab("") 
   p <- p + theme(axis.text.x = element_text( hjust = -3)) 
   p <- p + facet_grid(as.formula(sprintf('%s~.', plot.data$facet)))
+  p <- p + geom_text(aes(x=day+0.5,y=time+0.5),size=4)
+  p <- p + coord_cartesian(xlim = c(1, 6),ylim=c(1,5)) 
   p <- p + xlab("Day of week") 
   p <- p + ylab("") 
   p <- p + theme(axis.text.x = element_text( hjust = -3))
