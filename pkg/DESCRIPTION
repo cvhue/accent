@@ -39,3 +39,4 @@ Collate:
     'input.R'
     'test.R'
     'service.R'
+    'config.R'
