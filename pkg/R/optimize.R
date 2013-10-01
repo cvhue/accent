@@ -120,3 +120,5 @@ parseSolution <- function(solutionFile){
   this$data <- solution
   return(this)  
 }
+
+
