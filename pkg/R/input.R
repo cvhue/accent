@@ -163,22 +163,22 @@ readSimpleJSONModelInput <- function(jsonFile){
 #' @description the SPLAN JSON file can describe any Input Model.
 #' For the AccentInputModel, onlythe therapists, patients, patientskills and parameters
 #' are extracted from the SPLAN descriptor
-#' @param jsonFile
+#' @param splanJSON path to JSON file, or String with JSON content
 #' 
 #' @export 
 #' @return  AccentModelInput instance. This instance contains data.table instances extracted from the JSON file.
 #' @example 
 #' \dontrun{
 #'   test.json <- system.file(package="thinkdata.accent", "examples", "splan_data.json")
-#'   input <- readSplanJSONInput(jsonFile=test.json) 
+#'   input <- readSplanJSONInput(splanJSON=test.json) 
 #'   isTRUE("AccentModelInput" %in% class(input))
 #'   str(input)
 #' }
-readSplanJSONInput <- function(jsonFile){
+readSplanJSONInput <- function(splanJSON){
   Log$info("creating AccentModelInput from SpanJSON")
   
   tmp <- list()
-  tmp$json <- fromJSON(jsonFile)
+  tmp$json <- fromJSON(splanJSON)
 #   tmp$json <- fromJSON("/Users/kennyhelsens/accent/pkg/inst/examples/splan_data.json")
   
   
@@ -218,7 +218,7 @@ readSplanJSONInput <- function(jsonFile){
                               function(x){expand.grid(x[["name"]], x[["skills"]])}
                        )
     )
-    )
+  )
   setnames(this$therapists, c("therapist", "skill"))
   
   
