@@ -243,49 +243,18 @@ readSplanJSONInput <- function(splanJSON){
      )
   setnames(this$parameters, c("parameter", "value"))
 
-  
- 
-  # helper function to convert time constraints from Splan JSON into a tabular format
-  extractSplanTimeConstraints <- function(
-    constraint.type="time_yes",
-    group="subject",
-    person="patient"){
-
-    inner <- list()
-    inner$data <- 
-      data.table(
-        do.call(rbind, lapply(tmp$json$constraint[[group]], FUN=function(x){
-          if(x[["type"]] == constraint.type){
-            expand.grid(x[["uid"]], x[["day"]], x[["block"]])
-          } else{
-            c(NA,NA)
-          }
-        })
-        )
-      )
-
-    setnames(inner$data, c("uid", "day","time"))
-    setkey(inner$data, "uid")
-    inner$data <- na.omit(inner$data)
-    inner$data <- merge(inner$data, tmp[[group]])
-    inner$data$uid <- NULL
-    setnames(inner$data, c("name"), c(person))
-    inner$data <- inner$data[,c(3,1,2), with=FALSE]
-    inner$data
-
-  }
-  
+    
   this$patientpreferences <- 
-    extractSplanTimeConstraints(constraint.type="time_yes", group="subject", person="patient")
+    extractSplanTimeConstraints(splanJSON=tmp$json, constraint.type="time_yes", group="subject", person="patient")
   
   this$patientunavailabilities <- 
-    extractSplanTimeConstraints(constraint.type="time_no", group="subject", person="patient")
+    extractSplanTimeConstraints(splanJSON=tmp$json, constraint.type="time_no", group="subject", person="patient")
 
   this$therapistpreferences <- 
-    extractSplanTimeConstraints(constraint.type="time_yes", group="lead", person="therapist")
+    extractSplanTimeConstraints(splanJSON=tmp$json, constraint.type="time_yes", group="lead", person="therapist")
   
   this$therapistunavailabilities <-
-    extractSplanTimeConstraints(constraint.type="time_no", group="lead", person="therapist")
+    extractSplanTimeConstraints(splanJSON=tmp$json, constraint.type="time_no", group="lead", person="therapist")
   
     
   class(this) <- c("AccentModelInput")
