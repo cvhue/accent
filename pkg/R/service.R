@@ -13,10 +13,8 @@ rookSplan <- function(env){
   res <- Rook::Response$new()
   
   if(req$post()){
-    post <- extractJSONPOST(req$POST())
-#     cat(post)
-    json <- fromJSON(post)
-    input <- readSplanJSONInput(json)
+    splanJSON <- extractJSONPOST(req$POST())
+    input <- readSplanJSONInput(splanJSON)
     solution <- optimizeAccentModel(input)
     res$write(toJSON(solution))
   
