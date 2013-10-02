@@ -14,7 +14,7 @@
 #' input <- randomAccentModelInput()
 #' isTRUE("AccentModelInput" %in% class(input))
 #' str(input)
-#' result <- optimize(input)
+#' result <- optimizeAccentModel(input)
 optimizeAccentModel <- function(input) {
   if("AccentModelInput" %in% class(input) == FALSE){
     Log$info("input is not of type AccentModelInput. ")
