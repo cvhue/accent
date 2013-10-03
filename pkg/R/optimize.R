@@ -2,7 +2,7 @@
 #' 
 #' @description desc
 #' 
-#' @param AccentModelInput
+#' @param input instance of AccentInputModel
 #' 
 #' \itemize{
 #'  \item{patients:}{Sepal width}
@@ -90,50 +90,5 @@ optimizeAccentModel <- function(input) {
   
   tmp <- NULL
   return(solution)
-}
-
-#' @title convenience function to wrap a mathprog solution outputFile into a AccentModelOutput instance.
-#' 
-#' @description desc
-#' 
-#' @param AccentModelResult
-#' 
-#' @return  AccentModelSolution instance.
-#' @export 
-#' @examples
-#' solutionFile <- system.file(package="thinkdata.accent", "examples", "solution.csv")
-#' solution <- parseSolution(solutionFile=solutionFile) 
-#' str(solution)
-#' isTRUE("AccentModelSolution" %in% class(solution))
-parseSolution <- function(solutionFile){
-  if(file.exists(solutionFile) == FALSE){
-    Log$info(sprintf("%s is not an existing file", solutionFile))
-  }
-  solution <- data.table(read.table(solutionFile, sep=",",header=TRUE)) 
-  setnames(solution, c("therapist", "patient", "day", "time"))
-  this <- list()
-  class(this) <- "AccentModelSolution"
-  
-  this$file <- solutionFile
-  this$data <- solution
-  return(this)  
-}
-
-#' @title convenience function to wrap a mathprog solution outputFile into a AccentModelOutput instance.
-#' 
-#' @description desc
-#' 
-#' @param AccentModelResult
-#' 
-#' @return  AccentModelSolution instance.
-#' @export 
-#' @examples
-#' solutionFile <- system.file(package="thinkdata.accent", "examples", "solution.csv")
-#' solution <- parseSolution(solutionFile=solutionFile) 
-#' cat(toJSON.AccentModelSolution(solution))
-toJSON.AccentModelSolution <- function(solution){
-  tmp <- solution$data
-  result <- toJSON(apply(tmp, MARGIN=1, FUN=as.list))
-  return(result)  
 }
 

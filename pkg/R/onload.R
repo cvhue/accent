@@ -1,4 +1,4 @@
-.onLoad <- function(libname=.Library, pkgname="thinkdata.accent") {
+.onAttach <- function(libname=.Library, pkgname="thinkdata.accent") {
 
   pkdesc <- utils::packageDescription(pkgname, lib.loc = libname, fields = "Version", drop = TRUE)
 

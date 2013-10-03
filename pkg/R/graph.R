@@ -36,10 +36,10 @@ drawSchedule <- function(solution, detail=NULL, type="patient"){
     plot.data$facet <- "patient"
     plot.data$fill <- "therapist"
     plot.data$title <- "Patient Schedule"
-    plot.data$df$label <- plot.data$df$patient
+    plot.data$df$label <- plot.data$df$therapist
     
     if(is.null(detail) == FALSE){
-      plot.data$df <- subset(plot.data$df, detail %in% plot.data$df$patient)
+      plot.data$df <- subset(plot.data$df, detail == paste(plot.data$df$patient))
     }
   }
 
@@ -47,10 +47,10 @@ drawSchedule <- function(solution, detail=NULL, type="patient"){
     plot.data$facet <- "therapist"
     plot.data$fill <- "patient"
     plot.data$title <- "Therapist Schedule"
-    plot.data$df$label <- plot.data$df$therapist
+    plot.data$df$label <- plot.data$df$patient
     
     if(is.null(detail) == FALSE){
-      plot.data$df <- subset(plot.data$df, detail %in% plot.data$df$therapist)
+      plot.data$df <- subset(plot.data$df, detail == plot.data$df$therapist)
     }
   }
 
@@ -59,19 +59,24 @@ drawSchedule <- function(solution, detail=NULL, type="patient"){
     df$day.end = df$day+1
     df$time.end = df$time+1
 
-    df$dayf<-factor(df[,day],
+    df$dayf<-factor(df$day,
       levels=1:7,
       labels=c("Mon","Tue","Wed","Thu","Fri","Sat","Sun"),
       ordered=TRUE)
     
-    df$timef<-factor(plot.data$df[,time],
+    df$timef<-factor(df$time,
       levels=rev(1:5),
       labels=rev(c("8h","10h","13h","15h","17h")),
       ordered=TRUE)
     df  
   })
   
+  ## escape ggplot2 RCheck NOTES
+  day <- NULL
+  time <- NULL
+  ##
   
+
   p <-  ggplot(plot.data$df, aes_string(x = "dayf",
                        y = "timef",
                        fill = plot.data$fill,

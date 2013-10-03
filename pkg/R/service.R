@@ -14,7 +14,7 @@ rookSplan <- function(env){
     input <- readSplanJSONInput(splanJSON)
     solution <- optimizeAccentModel(input)
     
-    res$write(toJSON.AccentModelSolution(solution))
+    res$write(toSplanSolution(solution))
   
   }else{
     res$write(c('only supports POST splanJSON!','\n'))
@@ -50,9 +50,7 @@ SERVICE$apps$splan <- rookSplan
 #' @title start all configured splan Rook services, if any.  
 #' 
 #' @description this method starts all Rook apps
-#' @param myPort int port to run the sevice on
-#' @param myInterface char interface on which the service listens
-#' @param serviceApp char the app that needs to be run.   
+#' @param config instance of AccentConfig
 #' @export
 #' @examples
 #' config <- AccentConfig()

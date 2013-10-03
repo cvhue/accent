@@ -57,7 +57,7 @@ readXLSModelInput <- function(xlsFile){
 #' @description the simple JSON Model input has therapists, patients, patientskills and parameters.
 #' This information is sufficient for the accent problem.
 #' 
-#' @param jsonFile
+#' @param jsonFile The simple JSON is a toJSON dump of an AccentModelInput instance.
 #' 
 #' @export 
 #' @return  AccentModelInput instance. This instance contains data.table instances extracted from the JSON file.
@@ -71,7 +71,7 @@ readXLSModelInput <- function(xlsFile){
 readSimpleJSONModelInput <- function(jsonFile){
   Log$info("creating AccentModelInput instance from SimpleJSON")
   
-  json <- fromJSON(test.json)
+  json <- fromJSON(jsonFile)
   tmp <- list()
 
 # Simple validation

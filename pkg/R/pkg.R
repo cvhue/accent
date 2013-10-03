@@ -1,15 +1,7 @@
-#' Package title here
+#' Accent therapist-patient scheduling package
 #' 
-#' Package description here
+#' This package comprises all functionality to solve therapist-patient appointment scheduling problems. As input it expects either a tabular format, or a splanJSON problem descriptor file. The result contains the ideal schedule, computed with GLPK. This functionality can be accessed directly via package functions or via a web service.
 #'
-#' @section Data:
-#' \tabular{ll}{
-#'    \code{\link{iris}:} \tab An example data frame \cr
-#' }
-#' @section Utilities:
-#' \tabular{ll}{
-#'    \code{\link{myfunction}:} \tab TODO. \cr
-#' }
 #' @name thinkdata.accent 
 #' @aliases thinkdata.accent thinkdata.accent-package
 #' @docType package 
