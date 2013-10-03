@@ -2,9 +2,6 @@ library(thinkdata.accent)
 
 setLogging("info", logger="dateLogger")
 
-### RANDOM DATA
-# Read model and optimize solution
-# input <- randomAccentModelInput()
 
 ### SPLAN JSON
 test.json <- system.file(package="thinkdata.accent", "examples", "splan_data.json")

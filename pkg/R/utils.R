@@ -23,9 +23,11 @@ extractJSONPOST <- function(x){
 #' 
 extractSplanTimeConstraints <- function(
   splanJSON,
+  mapping,
   constraint.type="time_yes",
   group="subject",
-  person="patient"){
+  person="patient"
+  ){
   
   inner <- list()
   inner$data <- 
@@ -43,7 +45,7 @@ extractSplanTimeConstraints <- function(
   setnames(inner$data, c("uid", "day","time"))
   setkey(inner$data, "uid")
   inner$data <- na.omit(inner$data)
-  inner$data <- merge(inner$data, tmp[[group]])
+  inner$data <- merge(inner$data, mapping[[group]])
   inner$data$uid <- NULL
   setnames(inner$data, c("name"), c(person))
   inner$data <- inner$data[,c(3,1,2), with=FALSE]

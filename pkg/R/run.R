@@ -5,7 +5,7 @@
 #' @param df dataframe consisting of lead, subject, day and time
 #' @return ggplot schedule
 #' @export
-#' @example
+#' @examples
 #' \dontrun{
 #' runShinyAccent()	
 #' }

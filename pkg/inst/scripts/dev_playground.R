@@ -9,5 +9,5 @@ solution <- optimizeAccentModel(input)
 drawSchedule(solution, type="therapist")
 
 
-startService()
-req <- getLastRequest()
+thinkdata.accent::startService()
+req <- thinkdata.accent::getLastRequest()

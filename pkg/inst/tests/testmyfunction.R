@@ -32,8 +32,3 @@ test_exampleOptimization <- function(){
 #   solution <- parseSolution(solutionFile=solutionFile) 
 # }
 
-# generate random input
-test_randomInput(){
-  input <- randomAccentModelInput()
-  str(input)
-}

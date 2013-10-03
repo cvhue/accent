@@ -1,7 +1,4 @@
-require(Rook)
-require(RJSONIO)
-require(httpuv)
-
+# create a private DEBUG environment
 DEBUG <- new.env()
 
 
@@ -16,7 +13,8 @@ rookSplan <- function(env){
     splanJSON <- extractJSONPOST(req$POST())
     input <- readSplanJSONInput(splanJSON)
     solution <- optimizeAccentModel(input)
-    res$write(toJSON(solution))
+    
+    res$write(toJSON.AccentModelSolution(solution))
   
   }else{
     res$write(c('only supports POST splanJSON!','\n'))

@@ -10,7 +10,7 @@
 #' @return  AccentModelConfig instance. This instance contains 2 data.table instances extracted from the given XLS file.
 #' @examples 
 #' config <- AccentConfig()
-#' print(this$service)
+#' print(config$service)
 AccentConfig <- function(file = system.file(package="thinkdata.accent", "extdata", "baseconfig.json")){
   json.file <- "~/accent/pkg/inst/extdata/baseconfig.json"
   this <- fromJSON(json.file)
