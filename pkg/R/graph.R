@@ -36,6 +36,7 @@ drawSchedule <- function(solution, detail=NULL, type="patient"){
     plot.data$facet <- "patient"
     plot.data$fill <- "therapist"
     plot.data$title <- "Patient Schedule"
+    plot.data$df$label <- plot.data$df$patient
     
     if(is.null(detail) == FALSE){
       plot.data$df <- subset(plot.data$df, detail %in% plot.data$df$patient)
@@ -46,6 +47,7 @@ drawSchedule <- function(solution, detail=NULL, type="patient"){
     plot.data$facet <- "therapist"
     plot.data$fill <- "patient"
     plot.data$title <- "Therapist Schedule"
+    plot.data$df$label <- plot.data$df$therapist
     
     if(is.null(detail) == FALSE){
       plot.data$df <- subset(plot.data$df, detail %in% plot.data$df$therapist)
@@ -56,7 +58,7 @@ drawSchedule <- function(solution, detail=NULL, type="patient"){
   plot.data$df <- with(data=plot.data, {
     df$day.end = df$day+1
     df$time.end = df$time+1
-    
+
     df$dayf<-factor(df[,day],
       levels=1:7,
       labels=c("Mon","Tue","Wed","Thu","Fri","Sat","Sun"),
@@ -73,7 +75,7 @@ drawSchedule <- function(solution, detail=NULL, type="patient"){
   p <-  ggplot(plot.data$df, aes_string(x = "dayf",
                        y = "timef",
                        fill = plot.data$fill,
-                       label = subject,
+                       label = "label",
                        xmin = "day",
                        xmax = "day.end",
                        ymin = "time",
