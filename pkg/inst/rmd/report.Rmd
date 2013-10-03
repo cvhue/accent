@@ -1,6 +1,5 @@
 ```{r load_libs,  echo=FALSE, message=FALSE, warning=FALSE}
 require(thinkdata.accent)
-require(shiny)
 options(scipen=8)
 opts_chunk$set(echo=FALSE)
 opts_chunk$set(message=FALSE)

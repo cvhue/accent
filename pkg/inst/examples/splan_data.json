@@ -11,7 +11,11 @@
     "goal":[
         {
             "type":"minhours",
-            "value":1.0
+            "value":5.0
+        },
+        {
+            "type":"maxhours",
+            "value":40.0
         },
         {
             "type":"preference",
@@ -41,7 +45,7 @@
             "skills":[
                 3
             ]
-        },
+        }
         
     ],
     "skill":[
@@ -60,7 +64,48 @@
     ],
     "constraint":{
         "scheduler":[],
-        "lead":[]
+        
+        "lead":[
+            {
+                "uid":1,
+                "type":"time_yes",
+                "day":[1],
+                "block":[1,2,3]
+            },
+            {
+                "uid":2,
+                "type":"time_no",
+                "day":[3],
+                "block":[1,2,3,4,5]
+            },
+            {
+                "uid":3,
+                "type":"time_no",
+                "day":[5],
+                "block":[1,2,3,4,5]
+            }
+        ],
+        
+        "subject":[
+            {
+                "uid":1,
+                "type":"time_yes",
+                "day":[1],
+                "block":[1,2,3,4]
+            },
+            {
+                "uid":2,
+                "type":"time_yes",
+                "day":[1],
+                "block":[1,2,3]
+            },
+            {
+                "uid":3,
+                "type":"time_no",
+                "day":[5],
+                "block":[1,2,3]
+            }
+        ]
     },
     "subject":[
         {

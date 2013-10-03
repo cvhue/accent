@@ -10,19 +10,17 @@
 #' }
 #' @export 
 #' @return  AccentModelSolution instance. 
-#' @example
-#' input <- randomAccentModelInput()
-#' isTRUE("AccentModelInput" %in% class(input))
+#' @examples
+#' test.json <- system.file(package="thinkdata.accent", "examples", "splan_data.json")
+#' input <- readSplanJSONInput(splanJSON=test.json) 
 #' str(input)
-#' result <- optimize(input)
+#' result <- optimizeAccentModel(input)
 optimizeAccentModel <- function(input) {
   if("AccentModelInput" %in% class(input) == FALSE){
     Log$info("input is not of type AccentModelInput. ")
     return(NA)
   }
   
-	require("Rglpk")
-	
   tmp <- list()
   tmp$folder <- tempdir()
   tmp$ts <- strftime(Sys.time(), "%s")
@@ -102,11 +100,11 @@ optimizeAccentModel <- function(input) {
 #' 
 #' @return  AccentModelSolution instance.
 #' @export 
-#' @example
+#' @examples
 #' solutionFile <- system.file(package="thinkdata.accent", "examples", "solution.csv")
 #' solution <- parseSolution(solutionFile=solutionFile) 
 #' str(solution)
-#' isTRUE("AccentModelSolution" %in% class(input))
+#' isTRUE("AccentModelSolution" %in% class(solution))
 parseSolution <- function(solutionFile){
   if(file.exists(solutionFile) == FALSE){
     Log$info(sprintf("%s is not an existing file", solutionFile))
@@ -120,3 +118,22 @@ parseSolution <- function(solutionFile){
   this$data <- solution
   return(this)  
 }
+
+#' @title convenience function to wrap a mathprog solution outputFile into a AccentModelOutput instance.
+#' 
+#' @description desc
+#' 
+#' @param AccentModelResult
+#' 
+#' @return  AccentModelSolution instance.
+#' @export 
+#' @examples
+#' solutionFile <- system.file(package="thinkdata.accent", "examples", "solution.csv")
+#' solution <- parseSolution(solutionFile=solutionFile) 
+#' cat(toJSON.AccentModelSolution(solution))
+toJSON.AccentModelSolution <- function(solution){
+  tmp <- solution$data
+  result <- toJSON(apply(tmp, MARGIN=1, FUN=as.list))
+  return(result)  
+}
+

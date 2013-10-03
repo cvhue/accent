@@ -1,3 +1,9 @@
 {    
-"log.level" : "INFO" 
+	"service" : {
+		"port" : 3331,
+		"interface" : "0.0.0.0",
+		"app" : "splan"
+	},
+
+	"test" : "test"
 }

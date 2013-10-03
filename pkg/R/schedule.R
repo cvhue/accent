@@ -15,9 +15,7 @@ schedule <- function(df,
                      unavailable = NULL
                      
                      ){
-  
-  require("ggplot2")
-  
+    
   lead = names(df)[1]
   subject = names(df)[2]
   day = names(df)[3]

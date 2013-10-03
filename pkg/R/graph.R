@@ -3,17 +3,18 @@
 #' @description desc
 #' 
 #' @param solution AccentModelSolution
-#' @param subset char[] with one or more patients/therapists for which the schedule needs to be generated
+#' @param detail char[] with one or more patients/therapists for which the schedule needs to be generated
 #' @param type schedule type one of "patient" or "therapist"
 #' @export 
 #' @return  plot with the patient schedule 
-#' @example
-#' input <- randomAccentModelInput()
+#' @examples
+#' test.json <- system.file(package="thinkdata.accent", "examples", "splan_data.json")
+#' input <- readSplanJSONInput(splanJSON=test.json) 
 #' solution <- optimizeAccentModel(input=input)
 #' drawSchedule(solution, type="patient")
 #' drawSchedule(solution, type="therapist")
 #' 
-drawSchedule <- function(solution, subset=NULL, type="patient"){
+drawSchedule <- function(solution, detail=NULL, type="patient"){
 
   if("AccentModelSolution" %in% class(solution) == FALSE){
     Log$info("solution is not of type AccentModelSolution.")
@@ -35,9 +36,9 @@ drawSchedule <- function(solution, subset=NULL, type="patient"){
     plot.data$facet <- "patient"
     plot.data$fill <- "therapist"
     plot.data$title <- "Patient Schedule"
-
-    if(is.null(subset) == FALSE){
-      plot.data$df <- subset(plot.data$df, patient %in% c(subset))
+    
+    if(is.null(detail) == FALSE){
+      plot.data$df <- subset(plot.data$df, detail %in% plot.data$df$patient)
     }
   }
 
@@ -46,8 +47,8 @@ drawSchedule <- function(solution, subset=NULL, type="patient"){
     plot.data$fill <- "patient"
     plot.data$title <- "Therapist Schedule"
     
-    if(is.null(subset) == FALSE){
-      plot.data$df <- subset(plot.data$df, therapist %in% c(subset))
+    if(is.null(detail) == FALSE){
+      plot.data$df <- subset(plot.data$df, detail %in% plot.data$df$therapist)
     }
   }
 

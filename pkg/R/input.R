@@ -11,7 +11,7 @@
 #' }
 #' @export 
 #' @return  AccentModelInput instance. This instance contains 2 data.table instances extracted from the given XLS file.
-#' @example 
+#' @examples 
 #' \dontrun{
 #'   test.xls <- system.file(package="thinkdata.accent", "examples", "data.xls")
 #'   input <- readXLSModelInput(xlsFile=test.xls) 
@@ -19,9 +19,7 @@
 #'   str(input)
 #' }
 readXLSModelInput <- function(xlsFile){
-	require("xlsx")
-	
-	Log$info(sprintf("reading accent model input from %s ", xlsFile))
+  Log$info(sprintf("reading accent model input from %s ", xlsFile))
 
 	this <- list()
 	
@@ -54,51 +52,6 @@ readXLSModelInput <- function(xlsFile){
 }
 
 
-#' @title generate a random accent model input
-#' @return  AccentModelInput instance. This instance contains 2 data.table instances extracted from the given XLS file.
-#' @export 
-#' @examples
-#' input <- randomAccentModelInput() 
-#' isTRUE("AccentModelInput" %in% class(input))
-#' str(input)
-randomAccentModelInput <- function(){
-  Log$info("creating random AccentModelInput instance")
-  patients <- data.table(patient=paste0("P", 1:as.integer(runif(n=1,min=5,max=10))))
-  patientskills <- data.table(
-    patient=paste0("P", as.integer(runif(n=nrow(patients),min=1,max=10))),
-    skill=as.integer(runif(n=nrow(patients)*2, min=1, max=4))
-    )
-  patientskills <- unique(patientskills)
-
-# FIXME: therapist can now only have one skill, this randomizer has multiple skills per therapist.
-#   therapists <- data.table(
-#     therapist=paste0("Therapist-", rep(LETTERS[1:3],3)),
-#     skill=as.integer(runif(9, 1,100)%%3)+1
-#   )  
-#   therapists <- unique(therapists)
-#   
-  therapists <- data.table(
-        therapist=LETTERS[1:3],
-        skill=1:3
- )  
-    
-  
-  parameters <- data.table(
-    parameter=c("minhours", "preference"),
-    value=c(1, 0.5)
-  ) 
-
-  this <- list()
-  
-  this$patients <- patients
-  this$patientskills <- patientskills
-  this$therapists <- therapists
-  this$parameters <- parameters
-  class(this) <- c("AccentModelInput")
-  this
-}
-
-
 #' @title read accent model input from an JSON input file  
 #' 
 #' @description the simple JSON Model input has therapists, patients, patientskills and parameters.
@@ -108,7 +61,7 @@ randomAccentModelInput <- function(){
 #' 
 #' @export 
 #' @return  AccentModelInput instance. This instance contains data.table instances extracted from the JSON file.
-#' @example 
+#' @examples 
 #' \dontrun{
 #'   test.json <- system.file(package="thinkdata.accent", "examples", "data.json")
 #'   input <- readSimpleJSONModelInput(jsonFile=test.json) 
@@ -119,30 +72,38 @@ readSimpleJSONModelInput <- function(jsonFile){
   Log$info("creating AccentModelInput instance from SimpleJSON")
   
   json <- fromJSON(test.json)
+  tmp <- list()
 
-  # Simple validation
-  if(("patients" %in% names(json)) == FALSE){
-    Log$info("patients should be top level element in JSON")
-    return(NA)
-  }
-  if(("patientskills" %in% names(json)) == FALSE){
-    Log$info("patientskills should be top level element in JSON")
-    return(NA)
-  }
-  if(("therapists" %in% names(json)) == FALSE){
-    Log$info("therapists should be top level element in JSON")
-    return(NA)
-  }
-  if(("parameters" %in% names(json)) == FALSE){
-    Log$info("parameters should be top level element in JSON")
+# Simple validation
+  tmp$simple.json.types <- c(
+    "patients",
+    "patientskills",
+    "therapists",
+    "parameters",
+    "patientpreferences",
+    "therapistpreferences",
+    "patientunavailabilities",
+    "therapistunavailabilities"
+  )
+
+  tmp$simple.json.intersect <- intersect(tmp$simple.json.types, names(json))
+  
+  if(length(tmp$simple.json.intersect) != 8){
+    Log$info("input json does not have all required Splan types")
     return(NA)
   }
   
+
   this <- list()
   this$patients <- as.data.table(json$patients)
   this$therapists <- as.data.table(json$therapists)
   this$patientskills <- as.data.table(json$patientskills)
   this$parameters <- as.data.table(json$parameters)
+  
+  this$patientpreferences <- as.data.table(json$patientpreferences)
+  this$therapistpreferences <- as.data.table(json$therapistpreferences)
+  this$patientunavailabilities <- as.data.table(json$patientunavailabilities)
+  this$therapistunavailabilities <- as.data.table(json$therapistunavailabilities)
   class(this) <- c("AccentModelInput")
   this
 }
@@ -155,26 +116,26 @@ readSimpleJSONModelInput <- function(jsonFile){
 #' @description the SPLAN JSON file can describe any Input Model.
 #' For the AccentInputModel, onlythe therapists, patients, patientskills and parameters
 #' are extracted from the SPLAN descriptor
-#' @param jsonFile
+#' @param splanJSON path to JSON file, or String with JSON content
 #' 
 #' @export 
 #' @return  AccentModelInput instance. This instance contains data.table instances extracted from the JSON file.
-#' @example 
+#' @examples 
 #' \dontrun{
 #'   test.json <- system.file(package="thinkdata.accent", "examples", "splan_data.json")
-#'   input <- readSplanJSONInput(jsonFile=test.json) 
+#'   input <- readSplanJSONInput(splanJSON=test.json) 
 #'   isTRUE("AccentModelInput" %in% class(input))
 #'   str(input)
 #' }
-readSplanJSONInput <- function(jsonFile){
-  Log$info("creating random AccentModelInput from SlanJSON")
+readSplanJSONInput <- function(splanJSON){
+  Log$info("creating AccentModelInput from SpanJSON")
   
   tmp <- list()
-  tmp$json <- fromJSON(test.json)
+  tmp$json <- fromJSON(splanJSON)
 #   tmp$json <- fromJSON("/Users/kennyhelsens/accent/pkg/inst/examples/splan_data.json")
   
   
-  if(("accent" %in% tmp$json$general$problem) == FALSE){
+  if(("accent" %in% tmp$json$general) == FALSE){
     Log$info("Splan JSON problem is not of type accent!")
     return(NA)
   }
@@ -190,6 +151,17 @@ readSplanJSONInput <- function(jsonFile){
   
   this <- list()
   
+  groups <- list()
+  groups$subject <- as.data.table(t(as.data.table(tmp$json$subject)))
+  groups$subject <- data.table(uid=unlist(groups$subject$V1), name=unlist(groups$subject$V2))
+  setnames(groups$subject, c("uid", "name"))
+  setkey(groups$subject, "uid")
+  
+  groups$lead <- as.data.table(t(as.data.table(tmp$json$lead)))
+  groups$lead <- data.table(uid=unlist(groups$lead$V1), name=unlist(groups$lead$V2))
+  setnames(groups$lead, c("uid", "name"))
+  setkey(groups$lead, "uid")
+  
   # extract the patients from the subjects
   this$patients <- data.table(patient = sapply(tmp$json$subject, function(x){x[["name"]]}))
   
@@ -200,7 +172,7 @@ readSplanJSONInput <- function(jsonFile){
                               function(x){expand.grid(x[["name"]], x[["skills"]])}
                        )
     )
-    )
+  )
   setnames(this$therapists, c("therapist", "skill"))
   
   
@@ -224,7 +196,21 @@ readSplanJSONInput <- function(jsonFile){
              )
      )
   setnames(this$parameters, c("parameter", "value"))
+
+    
+  this$patientpreferences <- 
+    extractSplanTimeConstraints(splanJSON=tmp$json, constraint.type="time_yes", group="subject", person="patient", mapping=groups)
   
+  this$patientunavailabilities <- 
+    extractSplanTimeConstraints(splanJSON=tmp$json, constraint.type="time_no", group="subject", person="patient", mapping=groups)
+
+  this$therapistpreferences <- 
+    extractSplanTimeConstraints(splanJSON=tmp$json, constraint.type="time_yes", group="lead", person="therapist", mapping=groups)
+  
+  this$therapistunavailabilities <-
+    extractSplanTimeConstraints(splanJSON=tmp$json, constraint.type="time_no", group="lead", person="therapist", mapping=groups)
+  
+    
   class(this) <- c("AccentModelInput")
   this
 }

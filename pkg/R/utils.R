@@ -1,37 +1,54 @@
-#' Mytitle
+#' Extract JSON body from a POST call on a Rook service
 #' 
-#' My description
+#' Convenience function to extract the JSON body returned by a Rook service.
 #' 
-#' @param data a data frame
-#' @param ... passed on to other methods
-#' @return 
-#' A description of the return value
-#' @export
-#' @examples
-#' data(iris)
-#' myfunction(iris)
-myfunction <- function(data, ...){
-  result <- data
-  class(result) <- c("myclassname","data.frame")
-  result
-}
-
-#' Mytitle
+#' @param x the object returned by req$POST()
+#' @return String with content of JSON file, parseable by RJSONIO
 #' 
-#' My description
-#' 
-#' @param x an object of class myclassname
-#' @param ... further arguments passed to or from other methods.
-#' @return 
-#' Nothing, prints
-#' @method print myclassname
-#' @export print.myclassname
-#' @seealso \code{\link{print}}
-#' @examples
-#' data(iris)
-#' myfunction(iris)
-print.myclassname <- function(x, ...){
-  print(sprintf("This data.frame has %s row and %s columns", nrow(x), ncol(x)))
+extractJSONPOST <- function(x){
+  result <- names(x)[1]
+#   result <- substr(result, 1, (nchar(result)-1))
+  return(result)
 }
 
 
+
+#' Helper function to convert time constraints from Splan JSON into a tabular format
+#'  
+#' @param splanJSON : the raw JSON formatted SPLAN input
+#' @param constraint.type : either time_yes or time_no
+#' @param group : input domain splan group, either subject or lead
+#' @param person : output domain for accent, either patient or therapist
+#' @return String with content of JSON file, parseable by RJSONIO
+#' 
+extractSplanTimeConstraints <- function(
+  splanJSON,
+  mapping,
+  constraint.type="time_yes",
+  group="subject",
+  person="patient"
+  ){
+  
+  inner <- list()
+  inner$data <- 
+    data.table(
+      do.call(rbind, lapply(splanJSON$constraint[[group]], FUN=function(x){
+        if(x[["type"]] == constraint.type){
+          expand.grid(x[["uid"]], x[["day"]], x[["block"]])
+        } else{
+          c(NA,NA)
+        }
+      })
+      )
+    )
+  
+  setnames(inner$data, c("uid", "day","time"))
+  setkey(inner$data, "uid")
+  inner$data <- na.omit(inner$data)
+  inner$data <- merge(inner$data, mapping[[group]])
+  inner$data$uid <- NULL
+  setnames(inner$data, c("name"), c(person))
+  inner$data <- inner$data[,c(3,1,2), with=FALSE]
+  inner$data
+  
+}

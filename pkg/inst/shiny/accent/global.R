@@ -3,13 +3,10 @@ require(RJSONIO)
 
 setLogging("info", logger="dateLogger")
 
-### RANDOM DATA
-# Read model and optimize solution
-# input <- randomAccentModelInput()
 
 ### SPLAN JSON
-# test.json <- system.file(package="thinkdata.accent", "examples", "splan_data.json")
-# input <- readSplanJSONInput(jsonFile=test.json)
+test.json <- system.file(package="thinkdata.accent", "examples", "splan_data.json")
+input <- readSplanJSONInput(splanJSON=test.json)
 
 ### SIMPLE JSON
 # test.json <- system.file(package="thinkdata.accent", "examples", "data.json")

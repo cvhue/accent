@@ -1,4 +1,3 @@
-library(shiny)
 library(thinkdata.accent)
 
 # Define UI for application that plots random distributions 
