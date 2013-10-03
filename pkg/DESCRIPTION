@@ -35,8 +35,6 @@ Collate:
     'logging.R'
     'optimize.R'
     'run.R'
-    'schedule.R'
     'input.R'
-    'test.R'
     'service.R'
     'config.R'
