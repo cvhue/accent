@@ -1,5 +1,4 @@
 library(thinkdata.accent)
-require(RJSONIO)
 
 setLogging("info", logger="dateLogger")
 
@@ -13,8 +12,8 @@ input <- readSplanJSONInput(splanJSON=test.json)
 # input <- readSimpleJSONModelInput(jsonFile=test.json) 
 
 ### EXCEL INPUT
-test.xls <- system.file(package="thinkdata.accent", "examples", "data.xls")
-input <- readXLSModelInput(xlsFile=test.xls) 
+# test.xls <- system.file(package="thinkdata.accent", "examples", "data.xls")
+# input <- readXLSModelInput(xlsFile=test.xls) 
 
 # str(input)
 # str(splaninput)
@@ -22,5 +21,5 @@ input <- readXLSModelInput(xlsFile=test.xls)
 
 solution <- optimizeAccentModel(input)
 
-therapistList = c("All", unique(input$therapists$therapist))
-patientList <- c("All", unique(input$patients$patient))
+therapistList = c("All", unique(paste(solution$data$therapist)))
+patientList <- c("All", unique(paste(solution$data$patient)))

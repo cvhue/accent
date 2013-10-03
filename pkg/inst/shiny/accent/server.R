@@ -20,7 +20,7 @@ shinyServer(function(input, output) {
     if(therapistInput() == "All"){
       print(drawSchedule(solution, type="therapist"))
     } else {
-      print(drawSchedule(solution, type="therapist", subset=therapistInput()))
+      print(drawSchedule(solution, type="therapist", detail=paste(therapistInput())))
     }
     
   })
@@ -31,7 +31,7 @@ shinyServer(function(input, output) {
     if(patientInput() == "All"){
       print(drawSchedule(solution, type="patient"))
     } else {
-      print(drawSchedule(solution, type="patient", subset=patientInput()))
+      print(drawSchedule(solution, type="patient", detail=paste(patientInput())))
     }
     
   })
