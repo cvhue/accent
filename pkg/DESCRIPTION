@@ -6,11 +6,10 @@ Title: Project title
 Type: Package
 LazyLoad: yes
 Author: Christophe Van Huele, Kenny Helsens
-Description: Functionalities to ease computation and reporting for brand
-    evolutions at MARS
-Version: 0.1.2
+Description: Preference based scheduling of therapist-patient appointments.
+Version: 0.2
 URL: http://thinkdata.be
-Date: 2013-08-12
+Date: 2013-10-07
 Depends:
     ggplot2,
     shiny,
